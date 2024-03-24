@@ -27,21 +27,24 @@ const CreateForumPostForm = ({ onSubmit }) => {
     };
   
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4 items-center my-4">
         <input
           type="text"
           value={title}
           onChange={handleTitleChange}
           placeholder="Title"
+          className="w-full max-w-xl px-3 py-2 border rounded"
           required
         />
         <textarea
           value={content}
           onChange={handleContentChange}
           placeholder="Content"
+          className="w-full max-w-xl px-3 py-2 border rounded"
+          rows="4"
           required
         />
-        <button type="submit">Create Post</button>
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Create Post</button>
       </form>
     );
   };

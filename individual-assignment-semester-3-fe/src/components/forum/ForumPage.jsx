@@ -14,7 +14,7 @@ const ForumPage = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <CreateForumPostForm onSubmit={addForumPost} />
       {selectedPost ? (
         <ForumPost post={selectedPost} />

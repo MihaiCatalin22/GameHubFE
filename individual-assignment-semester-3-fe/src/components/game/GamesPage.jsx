@@ -18,7 +18,8 @@ const GamesPage = () => {
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-4xl p-4">
       {selectedGame ? (
         <GameForm onSave={saveGame} initialData={selectedGame} />
       ) : (
@@ -28,6 +29,7 @@ const GamesPage = () => {
         </>
       )}
       {selectedGame && <Game game={selectedGame} />}
+      </div>
     </div>
   );
 };

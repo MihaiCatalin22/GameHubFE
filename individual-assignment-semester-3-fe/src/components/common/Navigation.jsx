@@ -1,13 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Navigation = () => {
   return (
-    <nav className="flex space-x-4">
-      <Link to="/" className="text-white hover:text-gray-300">Home</Link>
-      <Link to="/games" className="text-white hover:text-gray-300">Games</Link>
-      <Link to="/forum" className="text-white hover:text-gray-300">Forum</Link>
-      <Link to="/users" className="text-white hover:text-gray-300">Users</Link>
+    <nav className="bg-gray-800 text-white p-4">
+      <ul className="flex justify-center space-x-4">
+        <li><NavLink to="/" activeClassName="text-gray-300" className="hover:text-gray-300">Home</NavLink></li>
+        <li><NavLink to="/games" activeClassName="text-gray-300" className="hover:text-gray-300">Games</NavLink></li>
+        <li><NavLink to="/forum" activeClassName="text-gray-300" className="hover:text-gray-300">Forum</NavLink></li>
+        <li><NavLink to="/profile" activeClassName="text-gray-300" className="hover:text-gray-300">Profile</NavLink></li>
+      </ul>
     </nav>
   );
 };
