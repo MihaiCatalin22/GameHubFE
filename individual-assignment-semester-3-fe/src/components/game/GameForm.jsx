@@ -1,27 +1,61 @@
 import React, { useState, useEffect } from 'react';
+import gameService from '../services/GameService';
 
 const GameForm = ({ onSave, initialData }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    genre: '',
+    title: '',
+    genres: [],
     releaseDate: '',
     description: '',
+    developer: '',
   });
 
+  const [allGenres, setAllGenres] = useState([]);
+
   useEffect(() => {
+    setAllGenres(['Action', 'Adventure', 'RPG', 'Simulation', 'Strategy']); // TODO: Replace with a real service call to fetch genres
+
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        ...initialData,
+        genres: initialData.genres || [],
+      });
     }
   }, [initialData]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setFormData({
+        ...formData,
+        genres: checked
+          ? [...formData.genres, value]
+          : formData.genres.filter((genre) => genre !== value),
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    if (initialData && initialData.id) {
+      gameService.updateGame(initialData.id, formData)
+        .then((response) => {
+          onSave(response.data);
+        })
+        .catch((error) => {
+          console.error('Error updating game:', error);
+        });
+    } else {
+      gameService.createGame(formData)
+        .then((response) => {
+          onSave(response.data);
+        })
+        .catch((error) => {
+          console.error('Error creating game:', error);
+        });
+    }
   };
 
   return (
@@ -29,30 +63,34 @@ const GameForm = ({ onSave, initialData }) => {
       <div className="w-full max-w-md p-4">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block mb-2">Game Name</label>
+            <label htmlFor="title" className="block mb-2">Title</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="title"
+              name="title"
+              value={formData.title}
               onChange={handleChange}
-              placeholder="Game Name"
+              placeholder="Game Title"
               className="w-full px-3 py-2 border rounded"
               required
             />
           </div>
           <div>
-            <label htmlFor="genre" className="block mb-2">Genre</label>
-            <input
-              type="text"
-              id="genre"
-              name="genre"
-              value={formData.genre}
-              onChange={handleChange}
-              placeholder="Genre"
-              className="w-full px-3 py-2 border rounded"
-              required
-            />
+            <label htmlFor="genre" className="block mb-2">Genres</label>
+            <div className="flex flex-wrap">
+              {allGenres.map((genre) => (
+                <label key={genre} className="inline-flex items-center mr-2">
+                  <input
+                    type="checkbox"
+                    name="genres"
+                    value={genre}
+                    checked={formData.genres.includes(genre)}
+                    onChange={handleChange}
+                  />
+                  {genre}
+                </label>
+              ))}
+            </div>
           </div>
           <div>
             <label htmlFor="releaseDate" className="block mb-2">Release Date</label>
@@ -73,7 +111,20 @@ const GameForm = ({ onSave, initialData }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Description"
+              placeholder="Game Description"
+              className="w-full px-3 py-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="developer" className="block mb-2">Developer</label>
+            <input
+              type="text"
+              id="developer"
+              name="developer"
+              value={formData.developer}
+              onChange={handleChange}
+              placeholder="Developer Name"
               className="w-full px-3 py-2 border rounded"
               required
             />

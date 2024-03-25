@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CreateForumPostForm from './CreateForumPostForm';
 import ForumPostsList from './ForumPostsList';
 import ForumPost from './ForumPost';
-import initialForumPosts from '../mockData/mockForumPosts';
+import forumService from '../services/ForumService';
 
 const ForumPage = () => {
-  const [forumPosts, setForumPosts] = useState(initialForumPosts);
+  const [forumPosts, setForumPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  useEffect(() => {
+    forumService.getAllPosts()
+      .then(response => {
+        setForumPosts(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching posts:', error);
+      });
+  }, []);
+
   const addForumPost = (newPost) => {
-    setForumPosts([newPost, ...forumPosts]);
-    setSelectedPost(newPost);
+    forumService.createPost(newPost, 1)
+      .then(response => {
+        setForumPosts([response.data, ...forumPosts]);
+        setSelectedPost(response.data);
+      })
+      .catch(error => {
+        console.error('Error creating post:', error);
+      });
   };
 
   return (
@@ -19,7 +35,7 @@ const ForumPage = () => {
       {selectedPost ? (
         <ForumPost post={selectedPost} />
       ) : (
-        <ForumPostsList onSelect={setSelectedPost} />
+        <ForumPostsList posts={forumPosts} onSelect={setSelectedPost} />
       )}
     </div>
   );
