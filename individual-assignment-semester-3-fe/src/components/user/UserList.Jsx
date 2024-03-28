@@ -1,19 +1,16 @@
-import React from "react";
-import mockUsers from "../../mockData/mockUsers";
+import React, { useState, useEffect } from 'react';
+import userService from '../services/UserService'; 
 
-const UserList = ({ onUserSelect }) => {
-    return (
-        <div>
-            <h2> User List </h2>
-            <u1>
-                {mockUsers.map((user) => (
-                    <li key={user.id} onClick={() => onUserSelect(user)}>
-
-                    </li>
-                ))}
-            </u1>
-        </div>
-    );
+const UserList = ({ users, onUserSelect }) => {
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id} onClick={() => onUserSelect(user)} style={{ cursor: 'pointer' }}>
+          {user.username}
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 export default UserList;

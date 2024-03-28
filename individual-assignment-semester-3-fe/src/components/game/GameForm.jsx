@@ -26,36 +26,30 @@ const GameForm = ({ onSave, initialData }) => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
-      setFormData({
-        ...formData,
+      setFormData(prevFormData => ({
+        ...prevFormData,
         genres: checked
-          ? [...formData.genres, value]
-          : formData.genres.filter((genre) => genre !== value),
-      });
+          ? [...prevFormData.genres, value]
+          : prevFormData.genres.filter(genre => genre !== value),
+      }));
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (initialData && initialData.id) {
-      gameService.updateGame(initialData.id, formData)
-        .then((response) => {
-          onSave(response.data);
-        })
-        .catch((error) => {
-          console.error('Error updating game:', error);
-        });
-    } else {
-      gameService.createGame(formData)
-        .then((response) => {
-          onSave(response.data);
-        })
-        .catch((error) => {
-          console.error('Error creating game:', error);
-        });
-    }
+    const action = initialData && initialData.id
+      ? gameService.updateGame(initialData.id, formData)
+      : gameService.createGame(formData);
+
+    action
+      .then(response => {
+        onSave(response.data);
+      })
+      .catch(error => {
+        console.error('Error saving game:', error);
+      });
   };
 
   return (
