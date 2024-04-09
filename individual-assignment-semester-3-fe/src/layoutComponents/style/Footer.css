@@ -1,0 +1,21 @@
+footer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #b39250; 
+    color: #381431; 
+    padding: 20px 0; 
+    text-align: center; 
+    border-top: #381431 solid 4px;
+}
+  
+  
+  .containerFooter {
+    max-width: 1200px; 
+    margin: 0 auto; 
+  }
+  
+  .containerFooter p {
+    margin: 0; 
+  }
+  

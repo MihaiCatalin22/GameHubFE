@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import gameService from '../services/GameService';
+import GenreTagsInput from './GenreTagsInput';
+
 
 const GameForm = ({ onSave, initialData }) => {
   const [formData, setFormData] = useState({
@@ -10,42 +12,40 @@ const GameForm = ({ onSave, initialData }) => {
     developer: '',
   });
 
-  const [allGenres, setAllGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState(initialData?.genres || []);
 
   useEffect(() => {
-    setAllGenres(['Action', 'Adventure', 'RPG', 'Simulation', 'Strategy']); // TODO: Replace with a real service call to fetch genres
-
+    setSelectedGenres(initialData?.genres || []);
     if (initialData) {
       setFormData({
-        ...initialData,
-        genres: initialData.genres || [],
+        title: initialData.title || '',
+        releaseDate: initialData.releaseDate || '',
+        description: initialData.description || '',
+        developer: initialData.developer || '',
       });
     }
   }, [initialData]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        genres: checked
-          ? [...prevFormData.genres, value]
-          : prevFormData.genres.filter(genre => genre !== value),
-      }));
-    } else {
-      setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const action = initialData && initialData.id
-      ? gameService.updateGame(initialData.id, formData)
-      : gameService.createGame(formData);
-
+    const gameData = {
+      ...formData,
+      genres: selectedGenres,
+    };
+    const action = initialData?.id
+      ? gameService.updateGame(initialData.id, gameData)
+      : gameService.createGame(gameData);
+    
     action
       .then(response => {
         onSave(response.data);
+        setFormData({ title: '', releaseDate: '', description: '', developer: '' });
+        setSelectedGenres([]);
       })
       .catch(error => {
         console.error('Error saving game:', error);
@@ -53,8 +53,8 @@ const GameForm = ({ onSave, initialData }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-4">
+    <div className="game-form">
+      <div className="game-form-container">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block mb-2">Title</label>
@@ -69,23 +69,10 @@ const GameForm = ({ onSave, initialData }) => {
               required
             />
           </div>
-          <div>
-            <label htmlFor="genre" className="block mb-2">Genres</label>
-            <div className="flex flex-wrap">
-              {allGenres.map((genre) => (
-                <label key={genre} className="inline-flex items-center mr-2">
-                  <input
-                    type="checkbox"
-                    name="genres"
-                    value={genre}
-                    checked={formData.genres.includes(genre)}
-                    onChange={handleChange}
-                  />
-                  {genre}
-                </label>
-              ))}
-            </div>
-          </div>
+          <GenreTagsInput
+            selectedGenres={selectedGenres}
+            setSelectedGenres={setSelectedGenres}
+          />          
           <div>
             <label htmlFor="releaseDate" className="block mb-2">Release Date</label>
             <input
@@ -123,7 +110,7 @@ const GameForm = ({ onSave, initialData }) => {
               required
             />
           </div>
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+          <button type="submit" className="button">
             Save Game
           </button>
         </form>

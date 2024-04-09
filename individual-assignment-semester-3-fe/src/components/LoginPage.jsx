@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-8">
-      <h2 className="text-lg font-semibold mb-4">Login</h2>
+    <div className="auth-form-container">
+      <h2 className="auth-form-title">Login</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="username" className="block mb-2">Username</label>
@@ -43,7 +43,11 @@ const LoginPage = () => {
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</button>
+        <button type="submit" className="auth-form-button">Login</button>
+        <p className="text-center">
+          Don't have an account? 
+          <Link to="/register" className="auth-form-link">Register</Link>
+        </p>
       </form>
     </div>
   );

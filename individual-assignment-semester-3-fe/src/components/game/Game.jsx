@@ -9,14 +9,12 @@ const Game = ({ game }) => {
         ? new Date(game.releaseDate).toLocaleDateString() 
         : "Unknown";
 
-    // return (
-    //     <div className="text-center mt-4">
-    //         <h2 className="text-2xl font-bold">{game.title}</h2>
-    //         <p className="mt-2">Genre: {game.genres.join(', ')}</p>
-    //         <p>Release date: {formattedReleaseDate}</p>
-    //         <p className="mb-4">Description: {game.description}</p>
-    //     </div>
-    // );
+        <div className="game-details">
+        <h2 className="game-details-title">{game.title}</h2>
+        <p className="game-details-genre">Genre: {game.genres.join(', ')}</p>
+        <p className="game-details-release">Release date: {formattedReleaseDate}</p>
+        <p className="game-details-description">Description: {game.description}</p>
+      </div>
 };
 
 export default Game;

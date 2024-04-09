@@ -1,42 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import UserService from '../services/UserService';
+import userService from '../services/UserService';
 import UserList from './UserList';
 import UserProfile from './UserProfile';
 
-// const UsersPage = () => {
-//   const [selectedUser, setSelectedUser] = useState(null);
-
-//   // Dummy users array for demonstration
-//   const users = [
-//     { id: 1, username: 'UserOne', email: 'userone@example.com' },
-//     { id: 2, username: 'UserTwo', email: 'usertwo@example.com' },
-//     { id: 3, username: 'UserThree', email: 'userthree@example.com' },
-//   ];
-
-//   const handleUserSelect = (user) => {
-//     console.log('Selected user:', user);
-//     setSelectedUser(user);
-//   };
-
-//   return (
-//     <div>
-//       <UserList users={users} onUserSelect={handleUserSelect} />
-//       {selectedUser && <UserProfile user={selectedUser} />}
-//     </div>
-//   );
-// };
 const UsersPage = () => {
-  // Hardcoded user data
-  const hardcodedUser = {
-    id: 1,
-    username: "JohnDoe",
-    email: "johndoe@example.com"
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    userService.getAllUsers()
+      .then(response => {
+        setUsers(response.data); // This should be an array of user objects
+        console.log("Users fetched successfully:", response.data);
+      })
+      .catch(error => {
+        console.error("Fetching users failed:", error);
+      });
+  }, []);
+
+  const handleUserSelect = (user) => {
+    console.log("User selected:", user);
+    setSelectedUser(user); // Ensure the user object is being set here
   };
+
+  // Log the state right before rendering for debugging purposes
+  console.log("Current users state:", users);
+  console.log("Current selectedUser state:", selectedUser);
 
   return (
     <div>
-      <UserProfile user={hardcodedUser} />
+      <UserList users={users} onUserSelect={handleUserSelect} />
+      {/* Render UserProfile only if selectedUser is not null */}
+      {selectedUser ? <UserProfile user={selectedUser} /> : <p>No user selected</p>}
     </div>
   );
 };
+
 export default UsersPage;

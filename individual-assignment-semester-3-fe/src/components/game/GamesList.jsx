@@ -15,12 +15,12 @@ const GamesList = ({ onSelect }) => {
     }, []);
 
     return (
-        <div className="text-center mt-4">
+        <div className="games-list-container">
             <h2 className="text-2xl font-bold">Games List</h2>
             {games.map((game) => (
-                <div key={game.id} onClick={() => onSelect(game)} className="cursor-pointer p-2 hover:bg-gray-200">
-                    <h3 className="text-lg font-semibold">{game.title}</h3>
-                    <p>{game.genres.join(', ')}</p>
+                <div key={game.id} onClick={() => onSelect(game)} className="games-list-item">
+                <h3 className="game-list-title">{game.title}</h3>
+                <p className="game-list-genres">{game.genres.join(', ')}</p>
                 </div>
             ))}
         </div>

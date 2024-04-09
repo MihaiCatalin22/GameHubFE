@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import userService from './services/UserService';
 
 const RegisterPage = () => {
-  const useNavigate = useNavigate();
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     username: '',
     email: '',
@@ -16,13 +17,19 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('User registered:', userDetails);
-    Navigate('/login');
+    userService.createUser(userDetails)
+      .then(() => {
+        console.log('User registered:', userDetails);
+        navigate('/');
+      })
+      .catch(error => {
+        console.error('Error creating user:', error);
+      });
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="auth-form-container">
+      <h2 className="auth-form-title">Register</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username</label>
@@ -57,7 +64,7 @@ const RegisterPage = () => {
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit" className="auth-form-button">Register</button>
       </form>
     </div>
   );

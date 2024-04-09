@@ -39,31 +39,31 @@ const ForumPost = ({ post: initialPost }) => {
   };
 
   return (
-      <article className="text-center my-4">
-          <h3 className="text-xl font-semibold">{post.title}</h3>
-          <p className="mt-2">{post.content}</p>
-          <time dateTime={post.creationDate} className="text-sm text-gray-500">
-              {new Date(post.creationDate).toLocaleString()}
-          </time>
-          <div className="mt-2">
-              <button onClick={handleLike} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                  Like ({post.likesCount})
-              </button>
-          </div>
-          <CommentsList comments={post.comments || []} />
-          <form onSubmit={handleCommentSubmit} className="mt-4">
-              <textarea
-                  className="w-full px-3 py-2 border rounded"
-                  placeholder="Add a comment..."
-                  value={commentContent}
-                  onChange={(e) => setCommentContent(e.target.value)}
-                  required
-              ></textarea>
-              <button type="submit" className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                  Submit Comment
-              </button>
-          </form>
-      </article>
+        <article className="text-center my-4">
+        <h3 className="forum-post-title">{post.title}</h3>
+        <p className="forum-post-content">{post.content}</p>
+        <time dateTime={post.creationDate} className="forum-post-date">
+        {new Date(post.creationDate).toLocaleString()}
+        </time>
+        <div className="mt-2">
+        <button onClick={handleLike} className="forum-form-button">
+            Like ({post.likesCount})
+        </button>
+        </div>
+        <CommentsList comments={post.comments || []} />
+        <form onSubmit={handleCommentSubmit} className="flex flex-col space-y-4 items-center my-4">
+        <textarea
+            className="forum-form-textarea"
+            placeholder="Add a comment..."
+            value={commentContent}
+            onChange={(e) => setCommentContent(e.target.value)}
+            required
+        ></textarea>
+        <button type="submit" className="forum-form-button">
+            Submit Comment
+        </button>
+        </form>
+    </article>
   );
 };
 export default ForumPost

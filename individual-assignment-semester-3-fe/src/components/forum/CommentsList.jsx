@@ -4,18 +4,22 @@ const CommentsList = ({ comments }) => {
   return (
     <div className="mt-4">
       <h4 className="font-bold">Comments:</h4>
-      {comments.length > 0 ? (
-        comments.map((comment) => (
-          <div key={comment.id} className="mt-2">
-            <p><strong>{comment.author.username}:</strong> {comment.content}</p>
-            <time className="text-sm text-gray-500">
-              {new Date(comment.creationDate).toLocaleString()}
-            </time>
-          </div>
-        ))
-      ) : (
-        <p>No comments yet.</p>
-      )}
+      <div className="comments-list">
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <div key={comment.id} className="comments-list-item">
+              <p className="comment-content">
+                <strong className="comment-author">{comment.author.username}:</strong> {comment.content}
+              </p>
+              <time className="comment-date">
+                {new Date(comment.creationDate).toLocaleString()}
+              </time>
+            </div>
+          ))
+        ) : (
+          <p>No comments yet.</p>
+        )}
+      </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import forumService from '../services/ForumService';
 const ForumPage = () => {
   const [forumPosts, setForumPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   useEffect(() => {
     forumService.getAllPosts()
@@ -31,7 +32,13 @@ const ForumPage = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <CreateForumPostForm onSubmit={addForumPost} />
+      <button
+        onClick={() => setShowCreateForm(!showCreateForm)}
+        className="button"
+      >
+        {showCreateForm ? 'Cancel' : 'Create a Post'}
+      </button>
+      {showCreateForm && <CreateForumPostForm onSubmit={addForumPost} />}
       {selectedPost ? (
         <ForumPost post={selectedPost} />
       ) : (
