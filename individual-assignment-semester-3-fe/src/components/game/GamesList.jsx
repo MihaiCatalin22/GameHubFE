@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import gameService from "../services/GameService";
+import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const GamesList = ({ onSelect }) => {
+  const navigate = useNavigate();
     const [games, setGames] = useState([]);
 
     useEffect(() => {
@@ -14,17 +17,18 @@ const GamesList = ({ onSelect }) => {
           });
     }, []);
 
+    const handleGameSelect = (gameId) => {
+      navigate(`/games/${gameId}`);
+    };
     return (
-        <div className="games-list-container">
-            <h2 className="text-2xl font-bold">Games List</h2>
-            {games.map((game) => (
-                <div key={game.id} onClick={() => onSelect(game)} className="games-list-item">
-                <h3 className="game-list-title">{game.title}</h3>
-                <p className="game-list-genres">{game.genres.join(', ')}</p>
-                </div>
-            ))}
+    <div className="games-list">
+      {games.map((game) => (
+        <div key={game.id} onClick={() => handleGameSelect(game.id)} className="game-summary">
+          <h3>{game.title}</h3>
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
 export default GamesList;

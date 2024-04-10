@@ -9,6 +9,8 @@ import GamesPage from './components/game/GamesPage';
 import UsersListPage from './components/user/UserList';
 import UserDetailPage from './components/user/UserDetailPage';
 import GameForm from './components/game/GameForm';
+import GameDetailsPage from './components/game/GameDetails';
+import GamesList from './components/game/GamesList';
 
 const App = () => {
   return (
@@ -21,8 +23,10 @@ const App = () => {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forum" element={<ForumPage />} />
               <Route path="/games" element={<GamesPage />} />
+              <Route path="/gamelist" element={<GamesList />} />
+              <Route path="/games/:gameId" element={<GameDetailsPage />} />
               <Route path="/users" element={<UsersListPage />} />
-            <Route path="/users/:userId" element={<UserDetailPage />} />
+              <Route path="/users/:userId" element={<UserDetailPage />} />
               <Route path="/add-game" element={<GameForm />} />
             </Routes>
             <Footer />

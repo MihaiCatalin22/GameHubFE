@@ -27,28 +27,34 @@ const CreateForumPostForm = () => {
 };
   
 return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4 items-center my-4">
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
-        className="forum-form-input"
-        required
-      />
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Content"
-        className="forum-form-textarea"
-        rows="4"
-        required
-      />
-      <button type="submit" className="forum-form-button">
+  <div className="form-container">
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+          className="form-input"
+          required
+        />
+      </div>
+      <div>
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Content"
+          className="form-textarea"
+          rows="4"
+          required
+        />
+      </div>
+      <button type="submit" className="form-button">
         Create Post
       </button>
     </form>
-  );
+  </div>
+);
 };
 
 export default CreateForumPostForm;

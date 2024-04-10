@@ -24,6 +24,7 @@ const ForumPage = () => {
       .then(response => {
         setForumPosts([response.data, ...forumPosts]);
         setSelectedPost(response.data);
+        setShowCreateForm(false);
       })
       .catch(error => {
         console.error('Error creating post:', error);
@@ -31,18 +32,26 @@ const ForumPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="forum-page-container">
       <button
         onClick={() => setShowCreateForm(!showCreateForm)}
-        className="button"
+        className="form-button"
       >
         {showCreateForm ? 'Cancel' : 'Create a Post'}
       </button>
-      {showCreateForm && <CreateForumPostForm onSubmit={addForumPost} />}
+      {showCreateForm && (
+        <CreateForumPostForm onSubmit={addForumPost} />
+      )}
       {selectedPost ? (
         <ForumPost post={selectedPost} />
       ) : (
-        <ForumPostsList posts={forumPosts} onSelect={setSelectedPost} />
+        <ForumPostsList 
+          posts={forumPosts} 
+          onSelect={(post) => {
+            setSelectedPost(post);
+            setShowCreateForm(false);
+          }} 
+        />
       )}
     </div>
   );
