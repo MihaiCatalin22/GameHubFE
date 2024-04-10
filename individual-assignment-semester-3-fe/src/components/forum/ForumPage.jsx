@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CreateForumPostForm from './CreateForumPostForm';
 import ForumPostsList from './ForumPostsList';
-import ForumPost from './ForumPost';
 import forumService from '../services/ForumService';
 
 const ForumPage = () => {
   const [forumPosts, setForumPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     forumService.getAllPosts()
@@ -23,7 +23,6 @@ const ForumPage = () => {
     forumService.createPost(newPost, 1)
       .then(response => {
         setForumPosts([response.data, ...forumPosts]);
-        setSelectedPost(response.data);
         setShowCreateForm(false);
       })
       .catch(error => {
@@ -39,18 +38,12 @@ const ForumPage = () => {
       >
         {showCreateForm ? 'Cancel' : 'Create a Post'}
       </button>
-      {showCreateForm && (
+      {showCreateForm ? (
         <CreateForumPostForm onSubmit={addForumPost} />
-      )}
-      {selectedPost ? (
-        <ForumPost post={selectedPost} />
       ) : (
         <ForumPostsList 
           posts={forumPosts} 
-          onSelect={(post) => {
-            setSelectedPost(post);
-            setShowCreateForm(false);
-          }} 
+          onSelect={(post) => navigate(`/forum/${post.id}`)}
         />
       )}
     </div>

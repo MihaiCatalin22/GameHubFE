@@ -27,29 +27,35 @@ const CreateForumPostForm = () => {
 };
   
 return (
-  <div className="form-container">
-    <form onSubmit={handleSubmit} className="space-y-4">
+  <div className="game-form-container">
+    <form onSubmit={handleSubmit} className="game-form">
       <div>
+        <label htmlFor="title" className="game-form-label">Post Title</label>
         <input
           type="text"
+          id="title"
+          name="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Title"
-          className="form-input"
+          placeholder="Enter post title"
+          className="game-form-input"
           required
         />
       </div>
       <div>
+        <label htmlFor="content" className="game-form-label">Content</label>
         <textarea
+          id="content"
+          name="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Content"
-          className="form-textarea"
+          placeholder="Write your post content here"
+          className="game-form-textarea"
           rows="4"
           required
         />
       </div>
-      <button type="submit" className="form-button">
+      <button type="submit" className="game-form-button">
         Create Post
       </button>
     </form>

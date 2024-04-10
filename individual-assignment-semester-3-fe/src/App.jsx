@@ -5,6 +5,7 @@ import Footer from './layoutComponents/Footer';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import ForumPage from './components/forum/ForumPage';
+import ForumPostDetails from './components/forum/ForumPostDetails';
 import GamesPage from './components/game/GamesPage';
 import UsersListPage from './components/user/UserList';
 import UserDetailPage from './components/user/UserDetailPage';
@@ -22,6 +23,7 @@ const App = () => {
               <Route path="/" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forum" element={<ForumPage />} />
+              <Route path="/forum/:postId" element={<ForumPostDetails />} />
               <Route path="/games" element={<GamesPage />} />
               <Route path="/gamelist" element={<GamesList />} />
               <Route path="/games/:gameId" element={<GameDetailsPage />} />
