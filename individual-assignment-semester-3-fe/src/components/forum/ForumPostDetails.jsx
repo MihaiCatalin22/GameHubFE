@@ -49,11 +49,26 @@ const ForumPostDetails = () => {
 
   return (
     <div className="forum-post-details">
-      <h2 className="post-title">{post.title}</h2>
-      <p className="post-content">{post.content}</p>
-      <button onClick={handleLike} className="like-button">Like ({post.likesCount})</button>
-      <CommentsList comments={comments} />
-      <CommentForm postId={postId} onCommentSubmit={handleCommentSubmit} />
+      <header className="post-header">
+        <h2 className="post-title">{post?.title}</h2>
+        {post?.category && (
+          <span className={`post-type ${post.category.toLowerCase()}`}>
+            {post.category}
+          </span>
+        )}
+        <div className="post-interactions">
+          <button onClick={handleLike} className="like-button">
+            Like ({post?.likesCount || 0})
+          </button>
+        </div>
+      </header>
+      <section className="post-content">
+        <p>{post?.content}</p>
+      </section>
+      <section className="comments-section">
+        <CommentsList comments={comments} />
+        <CommentForm postId={postId} onCommentSubmit={handleCommentSubmit} />
+      </section>
     </div>
   );
 };

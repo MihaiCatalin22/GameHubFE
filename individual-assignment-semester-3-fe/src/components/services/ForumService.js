@@ -34,6 +34,7 @@ const getAllPosts = () => {
   const getCommentsByPostId = (postId) => {
     return axios.get(`${API_URL}/posts/${postId}/comments`);
 };
+  
 
   const forumService = {
     createPost,
@@ -43,7 +44,7 @@ const getAllPosts = () => {
     deletePost,
     likePost,
     addCommentToPost,
-    getCommentsByPostId
+    getCommentsByPostId,
   }
 
   export default forumService

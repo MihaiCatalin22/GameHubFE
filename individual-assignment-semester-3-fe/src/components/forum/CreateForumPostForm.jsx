@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import forumService from '../services/ForumService';
+import categoryService from "../services/CategoryService";
+
 
 const CreateForumPostForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  useEffect(() => {
+    categoryService.getCategories()
+      .then(response => {
+        setCategories(response.data);
+        setSelectedCategory(response.data[0]);
+      })
+      .catch(error => console.error('Error fetching categories:', error));
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newPost = {
       title,
       content,
+      category: selectedCategory
     };
     const userId = 1;
     
@@ -17,6 +31,7 @@ const CreateForumPostForm = () => {
     .then(response => {
       setTitle('');
       setContent('');
+      setSelectedCategory(categories[0]);
       alert('Post created successfully!');
       console.log('Post created:', response.data);
     })
@@ -42,6 +57,23 @@ return (
           required
         />
       </div>
+      <div>
+          <label htmlFor="category" className="game-form-label">Category</label>
+          <select
+            id="category"
+            name="category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="game-form-input"
+            required
+          >
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
       <div>
         <label htmlFor="content" className="game-form-label">Content</label>
         <textarea

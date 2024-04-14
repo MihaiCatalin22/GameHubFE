@@ -277,18 +277,25 @@ button:focus-visible {
 }
 .game-form-container {
   max-width: 600px;
-  margin: auto;
+  margin: 2rem auto;
   padding: 1rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .game-form {
   background-color: #121212;
   color: #ffffff;
   padding: 2rem;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .game-form label {
   display: block;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
   color: #bbbbbb;
 }
@@ -296,24 +303,42 @@ button:focus-visible {
 .game-form input,
 .game-form textarea {
   width: 100%;
-  padding: 0.5rem;
+  padding: 10px 15px;
   margin-bottom: 1rem;
-  background-color: #1d1d1d;
+  background-color: #2e2e2e;
   border: 1px solid #333333;
   color: #ffffff;
-  border-radius: 8px;
+  border-radius: 4px;
 }
-
+.game-form-input:focus,
+.game-form-textarea:focus {
+  outline: none;
+  border-color: #50a3b3;
+  background-color: #3a3a3a;
+}
 .game-form button {
-  display: block;
-  width: 100%;
-  padding: 0.6rem 1rem;
+  padding: 10px 15px;
   background-color: #50a3b3;
-  color: #121212;
-  border-radius: 8px;
+  color: #ffffff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+.game-form-select {
+  padding: 10px 15px;
+  background-color: #2e2e2e;
+  color: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #333333;
 }
 
+.game-form-select:focus {
+  outline: none;
+  border-color: #50a3b3;
+  background-color: #3a3a3a;
+}
 .game-form button:hover {
   background-color: #378b8a;
 }
@@ -591,6 +616,98 @@ button:focus-visible {
 
 .like-button:hover {
   color: #378b8a;
+}
+
+.forum-post-details {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+.post-header {
+  border-bottom: 1px solid #3e3e3e;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  color: #50a3b3;
+}
+
+.post-type {
+  background: #282c34;
+  border-radius: 12px;
+  padding: 0.25rem 0.75rem;
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 0.9rem;
+}
+
+.post-type.general { background-color: #678c58; }
+.post-type.questions { background-color: #8c5c57; }
+.post-type.announcements { background-color: #57648c; }
+.post-type.guide { background-color: #c4a748}
+.post-type.bugs_and_glitches { background-color: #b55f5f;}
+.post-interactions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.like-button {
+  background: #50a3b3;
+  color: #121212;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.like-button:hover {
+  background: #378b8a;
+}
+
+.post-content {
+  margin-bottom: 1rem;
+}
+
+.comments-section {
+  margin-top: 2rem;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-textarea {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #3e3e3e;
+  padding: 0.5rem;
+  background-color: #2e2e2e;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.comment-submit-button {
+  background: #50a3b3;
+  color: #121212;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.comment-submit-button:hover {
+  background: #378b8a;
 }
 @media (prefers-color-scheme: light) {
   :root {
