@@ -276,9 +276,9 @@ button:focus-visible {
   background-color: #535bf2;
 }
 .game-form-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 2rem auto;
-  padding: 1rem;
+  padding: 46px;
   background-color: #1e1e1e;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
