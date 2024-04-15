@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import reviewService from '../services/ReviewService';
-
+import axios from 'axios';
 
 const ReviewSubmissionPage = () => {
     const { gameId } = useParams();
@@ -9,16 +9,16 @@ const ReviewSubmissionPage = () => {
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
 
-
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         if (!rating || !reviewText.trim()) {
             alert("Please fill in both rating and review text.");
             return;
         }
-
-        const reviewData = { rating, text: reviewText };
-        console.log("Submitting review for gameId:", gameId, "with data:", reviewData, "and userId:", 1);
+    
+        const reviewData = { rating, content: reviewText };
+        console.log("Review data being sent:", reviewData);
+    
         try {
             const response = await reviewService.addReview(gameId, reviewData, 1);
             console.log("Review submitted successfully:", response.data);
@@ -27,11 +27,10 @@ const ReviewSubmissionPage = () => {
             setRating(0);
             setReviewText('');
         } catch (error) {
-            console.error('Error submitting review:', error);
-            alert('Failed to submit review. Please try again.');
+            console.error('Error submitting review:', error.response ? error.response.data : error.message);
+            alert('Failed to submit review: ' + (error.response ? error.response.data : "No response data available"));
         }
     };
-
     const handleBack = () => {
         navigate('/games');
     };
