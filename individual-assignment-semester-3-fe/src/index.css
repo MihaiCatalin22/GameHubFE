@@ -8,6 +8,7 @@
   font-weight: 400;
   color-scheme: dark;
   text-align: center;
+  
 }
 
 a {
@@ -753,7 +754,88 @@ button:focus-visible {
 .comment-submit-button:hover {
   background: #378b8a;
 }
-@media (prefers-color-scheme: light) {
+.events-list {
+  padding: 1rem;
+  background-color: #202020;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.event-item {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.event-details {
+  background-color: #202020;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+}
+.event-form-container {
+  background-color: #121212; 
+  color: #ffffff; 
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.event-form-label {
+  display: block;
+  font-size: 1.1rem;
+  color: #bbbbbb; 
+  margin-bottom: 0.5rem;
+}
+
+.event-form-input,
+.event-form-select,
+.event-form-textarea {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 1rem;
+  background-color: #2e2e2e; 
+  border: 1px solid #333333; 
+  color: #ffffff; 
+  border-radius: 4px;
+}
+
+.event-form-input:focus,
+.event-form-select:focus,
+.event-form-textarea:focus {
+  outline: none;
+  border-color: #50a3b3; 
+  background-color: #3a3a3a;
+}
+
+.event-form-button {
+  padding: 10px 15px;
+  background-color: #50a3b3;
+  color: #ffffff; 
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.event-form-button:hover {
+  background-color: #378b8a; 
+}
+@media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -768,4 +850,99 @@ button:focus-visible {
     background-color: #f9f9f9;
     color: #213547;
   }
+}
+@media only screen and (max-width: 600px) {
+  h1 {
+      font-size: 2.5em;
+  }
+
+  .button {
+      padding: 0.5em 0.8em;
+  }
+
+  .form-container,
+  .game-form-container,
+  .forum-details-container,
+  .review-card {
+      padding: 1rem;
+      margin: 0.5rem;
+  }
+
+  .game-item,
+  .forum-post-item {
+      padding: 0.8rem;
+  }
+
+  .game-form input, .game-form textarea,
+  .comment-textarea,
+  .auth-form-input {
+      padding: 0.4em;
+  }
+
+  .star {
+      font-size: 1.5rem; 
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+  .form-container,
+  .game-form-container,
+  .forum-details-container {
+      padding: 1.5rem;
+      margin: 1rem;
+  }
+
+  .game-item,
+  .forum-post-item,
+  .review-card {
+      padding: 0.9rem;
+  }
+
+  .star {
+      font-size: 2rem;
+  }
+}
+
+@media only screen and (min-width: 901px) {
+  .form-container,
+  .game-form-container,
+  .forum-details-container {
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 800px;
+  }
+
+  .game-form input, .game-form textarea,
+  .comment-textarea,
+  .auth-form-input {
+      padding: 0.8em;
+  }
+}
+
+@media only screen and (min-width: 1201px) {
+  h1 {
+      font-size: 3.2em;
+  }
+
+  .button {
+      padding: 0.6em 1em;
+  }
+}
+
+body, .game-details, .review-card, .forum-post-item, .game-item {
+  background-color: #121212; 
+  color: #ffffff; 
+}
+
+.comment-content, .forum-post-content, .game-details-description, .forum-details-content {
+  color: #cfcfcf; 
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; 
+  width: 100%; 
+  background-color: #121212; 
+  color: #ffffff;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; 
 }
