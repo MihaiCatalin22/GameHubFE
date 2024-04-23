@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/authContext';
 import userService from '../services/UserService';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { hasRole } = useAuth();  
 
   useEffect(() => {
     userService.getAllUsers()
@@ -34,6 +36,7 @@ const UserList = () => {
         {filteredUsers.map(user => (
           <li key={user.id}>
             <Link to={`/users/${user.id}`}>{user.username}</Link>
+            {hasRole('ADMINISTRATOR') && <button className='button'>Delete User</button>}
           </li>
         ))}
       </ul>

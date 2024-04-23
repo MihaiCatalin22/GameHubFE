@@ -3,23 +3,30 @@ import { useParams } from 'react-router-dom';
 import userService from '../services/UserService';
 
 const UserDetailPage = () => {
-  const [user, setUser] = useState(null);
   const { userId } = useParams();
+  const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
-    userService.getUserById(userId)
-      .then(response => setUser(response.data))
-      .catch(error => console.error("Failed to fetch user:", error));
+    if (userId) {
+      userService.getUserById(userId)
+        .then(response => {
+          setUserDetails(response.data);
+        })
+        .catch(error => console.error("Failed to fetch user details:", error));
+    }
   }, [userId]);
 
-  if (!user) {
-    return <div>Loading user...</div>;
+  if (!userDetails) {
+    return <div>Loading user details...</div>;
   }
+
 
   return (
     <div>
       <h2>User Profile</h2>
-      <p>Username: {user.username}</p>
+      <p>Username: {userDetails.username}</p>
+     {/*{hasRole('ADMINISTRATOR') && <p>Email: {user.email}</p>} */}
+      <p>Bio: {userDetails.description}</p>
     </div>
   );
 };

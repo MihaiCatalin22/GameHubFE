@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import gameService from '../services/GameService';
 import GenreTagsInput from './GenreTagsInput';
-
+import { useAuth } from '../../contexts/authContext';
 
 const GameForm = ({ onSave, initialData }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ const GameForm = ({ onSave, initialData }) => {
     description: '',
     developer: '',
   });
-
+  const { user } = useAuth();
   const [selectedGenres, setSelectedGenres] = useState(initialData?.genres || []);
 
   useEffect(() => {
@@ -51,7 +51,9 @@ const GameForm = ({ onSave, initialData }) => {
         console.error('Error saving game:', error);
       });
   };
-
+  // if (!user || user.role !== 'ADMINISTRATOR') {
+  //   return <div className="no-game-selected">You do not have permission to modify game details.</div>;
+  // }
   return (
     <div className="game-form">
       <div className="game-form-container">

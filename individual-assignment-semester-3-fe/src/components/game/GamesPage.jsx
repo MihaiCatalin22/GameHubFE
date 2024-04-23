@@ -3,10 +3,13 @@ import Game from './Game';
 import GameForm from './GameForm';
 import GamesList from './GamesList';
 import gameService from '../services/GameService';
+import { useAuth } from '../../contexts/authContext';
+
 
 const GamesPage = () => {
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
+  const { hasRole } = useAuth();
 
   useEffect(() => {
     gameService.getAllGames()
@@ -61,9 +64,11 @@ const GamesPage = () => {
         ) : (
           <>
             <GamesList onSelect={handleSelectGame} />
-            <button onClick={handleAddNewGame} className="button">
-              Add New Game
-            </button>
+            {hasRole('ADMINISTRATOR') && (
+              <button onClick={handleAddNewGame} className="button">
+                Add New Game
+              </button>
+            )}
           </>
         )}
         {selectedGame && <Game game={selectedGame} />}

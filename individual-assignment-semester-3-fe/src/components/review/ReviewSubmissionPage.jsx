@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import reviewService from '../services/ReviewService';
-import axios from 'axios';
+import { useAuth } from '../../contexts/authContext';
 
 const ReviewSubmissionPage = () => {
     const { gameId } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
 
@@ -15,12 +16,15 @@ const ReviewSubmissionPage = () => {
             alert("Please fill in both rating and review text.");
             return;
         }
-    
+        if (!user) {
+            alert("You must be logged in to submit a review.");
+            return;
+        }
         const reviewData = { rating, content: reviewText };
         console.log("Review data being sent:", reviewData);
     
         try {
-            const response = await reviewService.addReview(gameId, reviewData, 1);
+            const response = await reviewService.addReview(gameId, reviewData, user.id);
             console.log("Review submitted successfully:", response.data);
             alert('Review submitted successfully!');
             navigate(`/games/${gameId}`);

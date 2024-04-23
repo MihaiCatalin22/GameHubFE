@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../../contexts/authContext';
 import userService from '../services/UserService';
 
 const UserProfile = () => {
   const { userId } = useParams();
-  const [user, setUser] = useState(null);
+  const { user, hasRole } = useAuth();
 
   useEffect(() => {
-    if (userId) {
-      userService.getUserById(userId)
-        .then(response => setUser(response.data))
-        .catch(error => console.error("Failed to fetch user:", error));
+    if (!user) {
+      console.error("No user found in context");
     }
-  }, [userId]);
+  }, [user]);
 
   if (!user) {
     return <div>No user selected</div>;
@@ -20,9 +19,10 @@ const UserProfile = () => {
 
   return (
     <div>
-      <h2>User Profile</h2>
+      <h2>Your Profile</h2>
       <p>Username: {user.username}</p>
-      {/* ... other user details */}
+      {hasRole('ADMINISTRATOR') && <p>Email: {user.email}</p>}
+      <p>Bio: {user.description}</p>
     </div>
   );
 };

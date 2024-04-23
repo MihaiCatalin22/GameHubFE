@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/authContext';
 import userService from '../services/UserService';
 import UserList from './UserList';
 import UserProfile from './UserProfile';
@@ -6,11 +7,12 @@ import UserProfile from './UserProfile';
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const { hasRole } = useAuth();
 
   useEffect(() => {
     userService.getAllUsers()
       .then(response => {
-        setUsers(response.data); // This should be an array of user objects
+        setUsers(response.data); 
         console.log("Users fetched successfully:", response.data);
       })
       .catch(error => {
@@ -20,18 +22,20 @@ const UsersPage = () => {
 
   const handleUserSelect = (user) => {
     console.log("User selected:", user);
-    setSelectedUser(user); // Ensure the user object is being set here
+    setSelectedUser(user); 
   };
 
-  // Log the state right before rendering for debugging purposes
   console.log("Current users state:", users);
   console.log("Current selectedUser state:", selectedUser);
 
   return (
     <div>
       <UserList users={users} onUserSelect={handleUserSelect} />
-      {/* Render UserProfile only if selectedUser is not null */}
-      {selectedUser ? <UserProfile user={selectedUser} /> : <p>No user selected</p>}
+      {selectedUser && (hasRole('ADMINISTRATOR') || hasRole('COMMUNITY_MANAGER')) ? (
+        <UserProfile user={selectedUser} />
+      ) : (
+        <p>No user selected or insufficient permissions to view details.</p>
+      )}
     </div>
   );
 };
