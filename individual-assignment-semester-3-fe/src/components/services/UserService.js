@@ -28,7 +28,7 @@ const API_URL = 'http://localhost:8080/users';
   };
 
   const createUser = (userData) => {
-    return api.post('/', userData);
+    return api.post(`http://localhost:8080/users`, userData);
   };
 
   const updateUser = (userId, userData) => {

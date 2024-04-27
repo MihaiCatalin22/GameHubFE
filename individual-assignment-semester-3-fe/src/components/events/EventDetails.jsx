@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import eventService from "../services/EventService";
+import { useAuth } from "../../contexts/authContext";
 
 const EventDetails = () => {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [timeLeft, setTimeLeft] = useState({});
   const [eventEnded, setEventEnded] = useState(false);
-  const userId = 1;
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -47,14 +48,39 @@ const EventDetails = () => {
   };
 
   const handleJoinEvent = async () => {
-    try {
-      await eventService.addParticipant(eventId, userId);
-      alert('You have joined the event');
-    } catch (error) {
-      console.error('Failed to join event:', error);
+    if (user) {
+      try {
+        const payload = { userId: user.id };
+        const response = await eventService.addParticipant(eventId, payload);
+        alert('You have joined the event');
+        setEvent(previousEvent => ({
+          ...previousEvent,
+          participants: [...previousEvent.participants, user]
+        }));
+      } catch (error) {
+        console.error('Failed to join event:', error);
+        alert('Failed to join event. Please try again.');
+      }
+    } else {
+      alert('You must be logged in to join the event');
     }
   };
-
+  const handleLeaveEvent = async () => {
+    if (user && user.id) {
+      try {
+        await eventService.removeParticipant(eventId, user.id);
+        alert('You have left the event');
+        const updatedEvent = await eventService.getEventById(eventId);
+        setEvent(updatedEvent.data);
+      } catch (error) {
+        console.error('Failed to leave event:', error);
+        alert('Failed to leave event. Please try again.');
+      }
+    }
+  }
+    const isParticipant = () => {
+      return event && event.participants.some(participant => participant.id === user.id);
+    };
   if (!event) {
     return <div>Loading event details...</div>;
   }
@@ -69,7 +95,14 @@ const EventDetails = () => {
       ) : (
         <>
           <p>Time until event ends: {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s</p>
-          <button className="button" onClick={handleJoinEvent}>Join Event</button>
+          {isParticipant() ? (
+            <>
+              <p>You are participating in this event.</p>
+              <button className="button" onClick={handleLeaveEvent}>Leave Event</button>
+            </>
+          ) : (
+            <button className="button" onClick={handleJoinEvent}>Join Event</button>
+          )}
           <p>Participants: {event.participants.length}</p>
         </>
         )}

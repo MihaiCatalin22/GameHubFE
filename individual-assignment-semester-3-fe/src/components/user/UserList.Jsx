@@ -17,7 +17,13 @@ const UserList = () => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  const handleDeleteUser = (userId) => {
+    userService.deleteUser(userId)
+      .then(() => {
+        setUsers(users.filter(user => user.id !== userId));
+      })
+      .catch(error => console.error("Failed to delete user:", error));
+  };
   const filteredUsers = users.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -36,7 +42,11 @@ const UserList = () => {
         {filteredUsers.map(user => (
           <li key={user.id}>
             <Link to={`/users/${user.id}`}>{user.username}</Link>
-            {hasRole('ADMINISTRATOR') && <button className='button'>Delete User</button>}
+            {hasRole('ADMINISTRATOR') && (
+              <button onClick={() => handleDeleteUser(user.id)} className='button'>
+                Delete User
+              </button>
+            )}
           </li>
         ))}
       </ul>

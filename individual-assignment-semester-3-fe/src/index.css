@@ -690,7 +690,13 @@ button:focus-visible {
   margin-left: 1rem;
   font-size: 0.9rem;
 }
-
+.post-author {
+  display: block;
+  color: #50a3b3;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
 .post-type.general { background-color: #678c58; }
 .post-type.questions { background-color: #8c5c57; }
 .post-type.announcements { background-color: #57648c; }
@@ -834,6 +840,25 @@ button:focus-visible {
 
 .event-form-button:hover {
   background-color: #378b8a; 
+}
+.past-events-list {
+  background-color: #161616;
+  color: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.past-event-item {
+  background-color: #282828;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.past-event-item:hover {
+  background-color: #393939;
 }
 @media (prefers-color-scheme: dark) {
   :root {

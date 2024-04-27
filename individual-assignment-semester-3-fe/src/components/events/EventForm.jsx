@@ -1,27 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import EventService from '../services/EventService';
 
-const EventForm = ({ onEventCreated }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+const EventForm = ({ onEventSaved, existingEvent }) => {
+  const [name, setName] = useState(existingEvent ? existingEvent.name : '');
+  const [description, setDescription] = useState(existingEvent ? existingEvent.description : '');
+  const [startDate, setStartDate] = useState(existingEvent ? existingEvent.startDate : '');
+  const [endDate, setEndDate] = useState(existingEvent ? existingEvent.endDate : '');
+
+  const isUpdate = existingEvent && existingEvent.id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting:', { startDate, endDate });
+    const eventData = { name, description, startDate, endDate };
+    
     try {
-      const eventData = { name, description, startDate, endDate };
-      const response = await EventService.createEvent(eventData);
-      onEventCreated(response.data);
-      alert('Event created successfully!');      
+      let response;
+      if (isUpdate) {
+        response = await EventService.updateEvent(existingEvent.id, eventData);
+        alert('Event updated successfully!');
+      } else {
+        response = await EventService.createEvent(eventData);
+        alert('Event created successfully!');
+      }
+      onEventSaved(response.data);
       setName('');
       setDescription('');
       setStartDate('');
       setEndDate('');
     } catch (error) {
-      console.error('Failed to create event:', error);
-      alert('Failed to create event.');
+      console.error('Failed to save event:', error);
+      alert(`Failed to ${isUpdate ? 'update' : 'create'} event.`);
     }
   };
 
@@ -67,7 +75,7 @@ const EventForm = ({ onEventCreated }) => {
             required
           />
         </div>
-        <button type="submit" className="event-form-button">Create Event</button>
+        <button type="submit" className="event-form-button">{isUpdate ? 'Update Event' : 'Create Event'}</button>
       </form>
     </div>
   );

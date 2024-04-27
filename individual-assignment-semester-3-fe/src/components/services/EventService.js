@@ -22,9 +22,9 @@ const deleteEvent = (id) => {
     return axios.delete(`${API_URL}/${id}`);
 };
 
-const addParticipant = (eventId, userId) => {
-    return axios.post(`${API_URL}/${eventId}/participants`, { userId });
-};
+const addParticipant = (eventId, payload) => {
+    return axios.post(`${API_URL}/${eventId}/participants`, payload); 
+  };
 
 const removeParticipant = (eventId, userId) => {
     return axios.delete(`${API_URL}/${eventId}/participants/${userId}`);

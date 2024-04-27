@@ -19,6 +19,10 @@ import EventDetails from './components/events/EventDetails'
 import EditProfile from './components/user/EditProfile';
 import UserProfile from './components/user/UserProfile';
 import LogoutPage from './components/LogoutPage';
+import UpdateEventPage from './components/events/UpdateEventPage';
+import PastEvents from './components/events/PastEventsPage';
+import EditGamePage from './components/game/EditGamePage';
+
 
 const App = () => {
   return (
@@ -36,6 +40,7 @@ const App = () => {
               <Route path="/gamelist" element={<GamesList />} />
               <Route path="/games/:gameId" element={<GameDetailsPage />} />
               <Route path="/games/:gameId/review" element={<ReviewSubmissionPage />} />
+              <Route path="/games/edit/:gameId" element={<EditGamePage />} />
               <Route path="/users" element={<UsersListPage />} />
               <Route path="/users/:userId" element={<UserDetailPage />} />
               <Route path="/profile" element={<UserProfile/>} />
@@ -43,6 +48,8 @@ const App = () => {
               <Route path="/add-game" element={<GameForm />} />
               <Route path="/events" element={<EventList />} />
               <Route path="/events/:eventId" element={<EventDetails />} />
+              <Route path="/past-events" element={<PastEvents/>} />
+              <Route path="/events/edit/:eventId" element={<UpdateEventPage />} />
               <Route path="/logout" element={<LogoutPage/>} />
             </Routes>
             <Footer />

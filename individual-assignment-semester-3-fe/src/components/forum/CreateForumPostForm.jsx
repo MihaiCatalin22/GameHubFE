@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import forumService from '../services/ForumService';
 import categoryService from "../services/CategoryService";
-
+import { useAuth } from "../../contexts/authContext";
 
 const CreateForumPostForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const { user } = useAuth();
 
   useEffect(() => {
     categoryService.getCategories()
@@ -25,20 +26,20 @@ const CreateForumPostForm = () => {
       content,
       category: selectedCategory
     };
-    const userId = 1;
     
-    forumService.createPost(newPost, userId)
-    .then(response => {
-      setTitle('');
-      setContent('');
-      setSelectedCategory(categories[0]);
-      alert('Post created successfully!');
-      console.log('Post created:', response.data);
-    })
-    .catch(error => {
-      alert('Failed to create the post. Please try again.');
-      console.error('Error creating post:', error);
-    });
+    if (user && user.id) {
+      forumService.createPost(newPost, user.id)
+      .then(response => {
+        setTitle('');
+        setContent('');
+        alert('Post created successfully!');
+        console.log('Post created:', response.data);
+      })
+      .catch(error => {
+        alert('Failed to create the post. Please try again.');
+        console.error('Error creating post:', error);
+      });
+    }
 };
   
 return (

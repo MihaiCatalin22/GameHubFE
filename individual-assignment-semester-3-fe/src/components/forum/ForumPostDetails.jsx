@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import forumService from "../services/ForumService";
 import CommentsList from "./CommentsList";
 import CommentForm from "./CommentForm";
+import { useAuth } from '../../contexts/authContext';
+
 
 const ForumPostDetails = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     forumService.getPostById(postId)
@@ -24,25 +28,57 @@ const ForumPostDetails = () => {
   }, [postId]);
 
   const handleCommentSubmit = (commentData) => {
-    const userId = 1;
-    forumService.addCommentToPost(postId, { content: commentData }, userId)
+    if (user && user.id) {
+      forumService.addCommentToPost(postId, { content: commentData }, user.id)
         .then(response => {
             setComments(currentComments => [...currentComments, response.data]);
         })
         .catch(error => {
             console.error("Error adding comment:", error);
         });
-};
-
-  const handleLike = () => {
-    const userId = 1;
-    forumService.likePost(postId, userId)
-      .then(() => {
-        setPost({...post, likesCount: post.likesCount + 1});
-      })
-      .catch(error => console.error("Error liking the post:", error));
+    }
   };
 
+  const handleLike = () => {
+    if (user && user.id) {
+      forumService.likePost(postId, user.id)
+        .then(response => {
+          setPost(prevPost => ({
+            ...prevPost,
+            likesCount: response.data.likesCount,
+            likes: response.data.likes
+          }));
+        })
+        .catch(error => console.error("Error toggling like on the post:", error));
+    }
+  };
+
+  const canDelete = user && user.role.includes('ADMINISTRATOR');
+
+  const handleDeletePost = () => {
+    if (canDelete) {
+      forumService.deletePost(postId)
+        .then(() => {
+          navigate("/forum");
+        })
+        .catch(error => {
+          console.error("Error deleting the post:", error);
+        });
+    }
+  };
+
+  const handleDeleteComment = (commentId) => {
+    if (canDelete) {
+      forumService.deleteComment(postId, commentId)
+        .then(() => {
+          setComments(currentComments => currentComments.filter(c => c.id !== commentId));
+        })
+        .catch(error => {
+          console.error("Error deleting comment:", error);
+        });
+    }
+  };
+  
   if (!post) {
     return <div>Loading post...</div>;
   }
@@ -56,17 +92,27 @@ const ForumPostDetails = () => {
             {post.category}
           </span>
         )}
+        {post?.author && (
+          <span className="post-author">
+            Posted by: {post.author.username}
+          </span>
+        )}
         <div className="post-interactions">
           <button onClick={handleLike} className="like-button">
             Like ({post?.likesCount || 0})
           </button>
+          {canDelete && (
+            <button onClick={handleDeletePost} className="button">
+              Delete Post
+            </button>
+          )}
         </div>
       </header>
       <section className="post-content">
         <p>{post?.content}</p>
       </section>
       <section className="comments-section">
-        <CommentsList comments={comments} />
+        <CommentsList comments={comments} onDelete={handleDeleteComment} canDelete={canDelete}/>
         <CommentForm postId={postId} onCommentSubmit={handleCommentSubmit} />
       </section>
     </div>

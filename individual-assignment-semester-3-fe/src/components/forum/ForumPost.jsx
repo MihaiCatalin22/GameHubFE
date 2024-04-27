@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import forumService from "../services/ForumService";
 import CommentsList from "../forum/CommentsList";
 
+
+
 const ForumPost = ({ post: initialPost }) => {
   const [post, setPost] = useState(initialPost);
   const [commentContent, setCommentContent] = useState('');

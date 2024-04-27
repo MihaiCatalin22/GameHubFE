@@ -1,22 +1,23 @@
 import React, { useState } from 'react';
 import forumService from '../services/ForumService';
-
+import { useAuth } from '../../contexts/authContext';
 
 const CommentForm = ({ postId, onCommentSubmit }) => {
   const [commentContent, setCommentContent] = useState('');
+  const { user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!commentContent.trim()) return;
 
-    const userId = 1;
-
-    try {
-      const response = await forumService.addCommentToPost(postId, { content: commentContent }, userId);
-      onCommentSubmit(response.data);
-      setCommentContent('');
-    } catch (error) {
-      console.error('Error adding comment:', error);
+    if (user && user.id) {
+      try {
+        const response = await forumService.addCommentToPost(postId, { content: commentContent }, user.id);
+        onCommentSubmit(response.data);
+        setCommentContent('');
+      } catch (error) {
+        console.error('Error adding comment:', error);
+      }
     }
   };
 

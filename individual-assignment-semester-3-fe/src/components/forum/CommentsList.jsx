@@ -1,6 +1,6 @@
 import React from "react";
 
-const CommentsList = ({ comments }) => {
+const CommentsList = ({ comments, onDelete, canDelete }) => {
   return (
     <div className="mt-4">
       <h4 className="font-bold">Comments:</h4>
@@ -14,6 +14,9 @@ const CommentsList = ({ comments }) => {
               <time className="comment-date">
                 {new Date(comment.creationDate).toLocaleString()}
               </time>
+              {canDelete && (
+                <button onClick={() => onDelete(comment.id)} className="button">Delete</button>
+              )}
             </div>
           ))
         ) : (

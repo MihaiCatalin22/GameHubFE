@@ -15,7 +15,6 @@ const GameForm = ({ onSave, initialData }) => {
   const [selectedGenres, setSelectedGenres] = useState(initialData?.genres || []);
 
   useEffect(() => {
-    setSelectedGenres(initialData?.genres || []);
     if (initialData) {
       setFormData({
         title: initialData.title || '',
@@ -23,6 +22,7 @@ const GameForm = ({ onSave, initialData }) => {
         description: initialData.description || '',
         developer: initialData.developer || '',
       });
+      setSelectedGenres(initialData.genres || []);
     }
   }, [initialData]);
 
@@ -31,29 +31,19 @@ const GameForm = ({ onSave, initialData }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const gameData = {
-      ...formData,
-      genres: selectedGenres,
-    };
-    const action = initialData?.id
-      ? gameService.updateGame(initialData.id, gameData)
-      : gameService.createGame(gameData);
-    
-    action
-      .then(response => {
+    const gameData = { ...formData, genres: selectedGenres };
+    try {
+        const response = initialData?.id ? await gameService.updateGame(initialData.id, gameData) : await gameService.createGame(gameData);
         onSave(response.data);
-        setFormData({ title: '', releaseDate: '', description: '', developer: '' });
-        setSelectedGenres([]);
-      })
-      .catch(error => {
+    } catch (error) {
         console.error('Error saving game:', error);
-      });
-  };
-  // if (!user || user.role !== 'ADMINISTRATOR') {
-  //   return <div className="no-game-selected">You do not have permission to modify game details.</div>;
-  // }
+    }
+};
+   if (!user || !user.role.includes('ADMINISTRATOR')) {
+    return <div className="no-game-selected">You do not have permission to modify game details.</div>;
+  }
   return (
     <div className="game-form">
       <div className="game-form-container">
