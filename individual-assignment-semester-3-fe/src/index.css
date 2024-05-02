@@ -97,7 +97,14 @@ button:focus-visible {
   list-style-type: none;
   padding-left: 0; 
 }
-
+.profile-picture {
+  width: 125px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
+}
 .user-list li {
   padding: 0.5em;
   margin: 0.5em 0;

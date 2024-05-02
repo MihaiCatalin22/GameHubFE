@@ -25,7 +25,7 @@ const UserDetailPage = () => {
     <div>
       <h2>User Profile</h2>
       <p>Username: {userDetails.username}</p>
-     {/*{hasRole('ADMINISTRATOR') && <p>Email: {user.email}</p>} */}
+      {hasRole('ADMINISTRATOR') && <p>Email: {user.email}</p>}
       <p>Bio: {userDetails.description}</p>
     </div>
   );
