@@ -867,6 +867,91 @@ button:focus-visible {
 .past-event-item:hover {
   background-color: #393939;
 }
+.edit-profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #23272A;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.edit-profile-input,
+.edit-profile-textarea,
+.edit-profile-select {
+  width: 100%;
+  padding: 12px 20px;
+  margin-bottom: 1rem;
+  background-color: #2C2F33; 
+  border: 1px solid #4F545C; 
+  color: #fff;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.edit-profile-input:focus,
+.edit-profile-textarea:focus,
+.edit-profile-select:focus {
+  outline: none;
+  border-color: #50a3b3;
+  background-color: #3a3a3a;
+}
+
+.edit-profile-label {
+  font-size: 1rem;
+  color: #7289DA;
+  margin-bottom: 0.5rem;
+}
+
+.edit-profile-title {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.edit-profile-button {
+  padding: 12px 20px;
+  background-color: #50a3b3;
+  color: #ffffff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-profile-button:hover {
+  background-color: #378b8a;
+}
+
+.profile-picture-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-top: 10px;
+  border: 3px solid #7289DA;
+  object-fit: cover;
+}
+
+.file-upload-input {
+  background-color: #2C2F33;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.file-upload-input:hover {
+  background-color: #3a3a3a;
+}
 @media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
