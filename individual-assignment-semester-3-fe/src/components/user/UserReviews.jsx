@@ -7,36 +7,41 @@ const UserReviews = () => {
   const { user } = useAuth();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (user?.id) {
       reviewService.getReviewsByUserId(user.id)
         .then(response => {
+          console.log('Full Response:', response);
           console.log('Reviews fetched:', response.data);
+          response.data.forEach(review => {
+            console.log(`Review ID: ${review.id}, Game ID: ${review.gameId ? review.gameId : 'No game associated'}`);
+          });
           setReviews(response.data);
-          setLoading(false);  // Set loading to false after data is fetched
+          setLoading(false);
         })
         .catch(error => {
           console.error("Error fetching reviews:", error);
-          setError('Failed to load reviews.');  // Set a user-friendly error message
-          setLoading(false);  // Ensure loading is set to false even when there is an error
+          setLoading(false);
         });
     } else {
-      setLoading(false); // Set loading to false if there is no user id
-      setError('User not identified.'); // Optional: set an error if no user id is found
+      setLoading(false);
     }
   }, [user?.id]);
-  
+
   if (loading) return <p>Loading reviews...</p>;
-  if (error) return <p>{error}</p>;
   if (!reviews.length) return <p>No reviews found.</p>;
+
   return (
     <div>
       <h2>User's Reviews</h2>
       {reviews.map(review => (
         <div key={review.id}>
-          <Link to={`/games/${review.game.id}`}>{review.content}</Link>
+          {/* Check for the existence of gameId before rendering the Link */}
+          {review.gameId ?
+            <Link to={`/games/${review.gameId}`}>{review.content}</Link> :
+            <p>Review for deleted or unavailable game</p>
+          }
         </div>
       ))}
     </div>
