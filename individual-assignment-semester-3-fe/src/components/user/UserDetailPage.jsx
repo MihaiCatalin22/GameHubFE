@@ -15,34 +15,36 @@ const UserDetailPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    userService.getUserById(userId).then(response => setUserDetails(response.data)).catch(error => console.error("Failed to fetch user details:", error));
-    forumService.getAllPosts(userId).then(res => setPosts(res.data));
-    reviewService.getReviewsByUserId(userId).then(res => setReviews(res.data));
+    userService.getUserById(userId)
+      .then(response => setUserDetails(response.data))
+      .catch(error => console.error("Failed to fetch user details:", error));
+
+    forumService.getPostsByUserId(userId)
+      .then(response => setPosts(response.data))
+      .catch(error => console.error("Failed to fetch posts:", error));
+
+    reviewService.getReviewsByUserId(userId)
+      .then(response => setReviews(response.data))
+      .catch(error => console.error("Failed to fetch reviews:", error));
   }, [userId]);
 
   if (!userDetails) {
     return <div>Loading user details...</div>;
   }
+
   const profilePictureUrl = userDetails.profilePicture
     ? `http://localhost:8080/images/${userDetails.profilePicture}`
     : 'http://localhost:8080/images/default_image.jpg';
 
-  const handleViewPosts = () => {
-    navigate(`/users/${userId}/posts`);
-  };
-  
-  const handleViewReviews = () => {
-    navigate(`/users/${userId}/reviews`);
-  };  
   return (
-    <div>
-      <h2>User Profile</h2>
+    <div className="profile-content">
+      <h2 className="profile-header">User Profile</h2>
       <img src={profilePictureUrl} alt="Profile" className="profile-picture"/>
-      <p>Username: {userDetails.username}</p>
-      {hasRole('ADMINISTRATOR') && <p>Email: {user.email}</p>}
-      <p>Bio: {userDetails.description}</p>
-      <button onClick={handleViewPosts} className="button">View user's posts</button>
-      <button onClick={handleViewReviews} className="button">View user's reviews</button>
+      <p className="profile-detail">Username: {userDetails.username}</p>
+      {hasRole('ADMINISTRATOR') && <p className="profile-detail">Email: {userDetails.email}</p>}
+      <p className="profile-detail">Bio: {userDetails.description}</p>
+      <button onClick={() => navigate(`/user/${userId}/posts`)} className="button">View user's posts</button>
+      <button onClick={() => navigate(`/user/${userId}/reviews`)} className="button">View user's reviews</button>
     </div>
   );
 };

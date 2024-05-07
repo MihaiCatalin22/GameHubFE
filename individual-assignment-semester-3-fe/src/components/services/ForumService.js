@@ -37,7 +37,9 @@ const getAllPosts = () => {
   const deleteComment = (postId, commentId) => {
     return axios.delete(`${API_URL}/posts/${postId}/comments/${commentId}`);
   };
-
+  const getPostsByUserId = (userId) => {
+    return axios.get(`${API_URL}/posts/user/${userId}`);
+  };
   const forumService = {
     createPost,
     getAllPosts,
@@ -48,6 +50,7 @@ const getAllPosts = () => {
     addCommentToPost,
     getCommentsByPostId,
     deleteComment,
+    getPostsByUserId
   }
 
   export default forumService

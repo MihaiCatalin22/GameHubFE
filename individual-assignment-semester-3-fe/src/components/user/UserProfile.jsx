@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
 
 const UserProfile = () => {
@@ -23,12 +23,12 @@ const UserProfile = () => {
   };
 
   return (
-    <div>
-      <h2>Your Profile</h2>
+    <div className="profile-content">
+      <h2 className="profile-header">Your Profile</h2>
       <img src={user.profilePicture ? `http://localhost:8080/images/${user.profilePicture}` : 'http://localhost:8080/images/default_image.jpg'} alt="Profile" className="profile-picture"/>
-      <p>Username: {user.username}</p>
-      <p>Email: {user.email}</p>
-      <p>Bio: {user.description}</p>
+      <p className="profile-detail">Username: {user.username}</p>
+      <p className="profile-detail">Email: {user.email}</p>
+      <p className="profile-detail">Bio: {user.description}</p>
       <button onClick={handleEditProfile} className="button">Edit Profile</button>
       <button onClick={handleViewPosts} className="button">Your Posts</button>
       <button onClick={handleViewReviews} className="button">Your Reviews</button>
