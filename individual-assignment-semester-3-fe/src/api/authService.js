@@ -1,6 +1,25 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const API_URL = 'http://localhost:8080/users';
+
+const TokenManager = {
+    getAccessToken: () => sessionStorage.getItem("accessToken"),
+    getClaims: () => {
+        const claims = sessionStorage.getItem("claims");
+        return claims ? JSON.parse(claims) : undefined;
+    },
+    setAccessToken: (token) => {
+        sessionStorage.setItem("accessToken", token);
+        const claims = jwtDecode(token);
+        sessionStorage.setItem("claims", JSON.stringify(claims));
+        return claims;
+    },
+    clear: () => {
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("claims");
+    }
+};
 
 export const signUp = async (data) => {
     try {
@@ -19,7 +38,9 @@ export const login = async (userData) => {
         const jwt = response.headers['authorization'];
         console.log('JWT:', jwt);
         if (jwt) {
-            localStorage.setItem('jwt', jwt.split(" ")[1]);
+            const token = jwt.split(" ")[1];
+            const claims = TokenManager.setAccessToken(token);
+            console.log('Decoded JWT Claims:', claims);
             return response.data;
         } else {
             throw new Error('JWT not received');
@@ -30,14 +51,4 @@ export const login = async (userData) => {
     }
 };
 
-const tokenUtility = {
-    setToken: (token) => {
-        sessionStorage.setItem('jwtToken', token);
-    },
-    getToken: () => {
-        return sessionStorage.getItem('jwtToken');
-    },
-    clearToken: () => {
-        sessionStorage.removeItem('jwtToken');
-    }
-};
+export default TokenManager;

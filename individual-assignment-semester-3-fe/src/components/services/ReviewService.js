@@ -8,7 +8,7 @@ const getReviewsByGameId = (gameId) => {
 };
 
 const getReviewsByUserId = (userId) => {
-    return axios.get(`${API_URL}/users/${userId}`);
+    return axios.get(`${API_URL}/user/${userId}`);
 };
 
 const getAllReviews = () => {

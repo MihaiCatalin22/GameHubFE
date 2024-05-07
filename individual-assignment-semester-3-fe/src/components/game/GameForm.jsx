@@ -61,7 +61,7 @@ const GameForm = ({ onSave, initialData }) => {
               required
             />
           </div>
-          <label htmlFor='genres' classname="block mb-2">Genres</label>
+          <label htmlFor='genres' className="block mb-2">Genres</label>
           <GenreTagsInput
             selectedGenres={selectedGenres}
             setSelectedGenres={setSelectedGenres}

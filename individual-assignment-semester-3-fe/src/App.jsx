@@ -22,7 +22,8 @@ import LogoutPage from './components/LogoutPage';
 import UpdateEventPage from './components/events/UpdateEventPage';
 import PastEvents from './components/events/PastEventsPage';
 import EditGamePage from './components/game/EditGamePage';
-
+import UserPosts from './components/user/UserPosts';
+import UserReviews from './components/user/UserReviews';
 
 const App = () => {
   return (
@@ -43,6 +44,8 @@ const App = () => {
               <Route path="/games/edit/:gameId" element={<EditGamePage />} />
               <Route path="/users" element={<UsersListPage />} />
               <Route path="/users/:userId" element={<UserDetailPage />} />
+              <Route path="/user/:userId/posts" element={<UserPosts />} />
+              <Route path="/user/:userId/reviews" element={<UserReviews />} />
               <Route path="/profile" element={<UserProfile/>} />
               <Route path="/edit-profile" element={<EditProfile/>} />
               <Route path="/add-game" element={<GameForm />} />
