@@ -24,6 +24,7 @@ import PastEvents from './components/events/PastEventsPage';
 import EditGamePage from './components/game/EditGamePage';
 import UserPosts from './components/user/UserPosts';
 import UserReviews from './components/user/UserReviews';
+import AboutPage from './layoutComponents/About';
 
 const App = () => {
   return (
@@ -33,7 +34,7 @@ const App = () => {
           <div className="flex justify-center items-center w-full h-full min-h-screen">
           <Header />
             <Routes>
-              <Route path="/" element={<LoginPage />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forum" element={<ForumPage />} />
               <Route path="/forum/:postId" element={<ForumPostDetails />} />
@@ -54,6 +55,7 @@ const App = () => {
               <Route path="/past-events" element={<PastEvents/>} />
               <Route path="/events/edit/:eventId" element={<UpdateEventPage />} />
               <Route path="/logout" element={<LogoutPage/>} />
+              <Route path="/" element={<AboutPage/>} />
             </Routes>
             <Footer />
           </div>
