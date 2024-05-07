@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
 import userService from '../services/UserService';
 import FileService from '../services/FileService';
-
+import Modal from '../Modal';
+import ProfilePictureUpload from './ProfilePictureUpload';
 
 const EditProfile = () => {
     const { user, updateUserDetails } = useAuth();
@@ -15,6 +16,8 @@ const EditProfile = () => {
     });
     const [profilePicture, setProfilePicture] = useState(null);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const handleChange = (e) => {
         setFormData({
@@ -27,28 +30,46 @@ const EditProfile = () => {
         setProfilePicture(e.target.files[0]);
     };
 
+    const handleProfilePictureUpload = () => {
+        if (!profilePicture) {
+            setModalMessage('Please select a profile picture to upload!');
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('file', profilePicture);
+        FileService.uploadProfilePicture(formData, user.id)
+            .then(response => {
+                setModalMessage('Profile picture uploaded successfully');
+                setShowModal(true);
+                setTimeout(() => {
+                    setShowModal(false);
+                    updateUserDetails({ ...user, profilePicture: URL.createObjectURL(profilePicture) });
+                }, 2000);
+            })
+            .catch(error => {
+                setModalMessage('Failed to upload profile picture');
+                setShowModal(true);
+                setTimeout(() => setShowModal(false), 2000);
+                console.error('Upload error:', error);
+            });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await userService.updateUser(user.id, formData);
-            
-            if (profilePicture) {
-                const formData = new FormData();
-                formData.append('file', profilePicture);
-                await FileService.uploadProfilePicture(formData, user.id);
-            }
-
-            updateUserDetails({
-                ...user,
-                ...formData,
-                profilePicture: profilePicture ? URL.createObjectURL(profilePicture) : user.profilePicture
-            });
-
             navigate('/profile');
-            alert('Profile updated successfully!');
+            setModalMessage('Profile updated successfully!');
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
         } catch (error) {
             console.error("Failed to update profile:", error);
-            alert('Failed to update profile. Please try again.');
+            setModalMessage('Failed to update profile. Please try again.');
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
         }
     };
 
@@ -100,17 +121,17 @@ const EditProfile = () => {
                     </select>
                 </div>
                 <div>
-                    <label htmlFor="profilePicture" className="edit-profile-label">Profile Picture:</label>
-                    <input
-                        type="file"
-                        id="profilePicture"
-                        name="profilePicture"
-                        className="file-upload-input"
-                        onChange={handleProfilePictureChange}
-                        accept="image/*"
-                    />
+                <ProfilePictureUpload 
+                    userId={user.id} 
+                    onProfilePictureUploaded={(data) => {
+                        updateUserDetails({ ...user, profilePicture: data.url });
+                    }} 
+                />
                 </div>
                 <button type="submit" className='edit-profile-button'>Update Profile</button>
+                {showModal && <Modal isOpen={showModal} title="Notification">
+                {modalMessage}
+            </Modal>}
             </form>
         </div>
     );

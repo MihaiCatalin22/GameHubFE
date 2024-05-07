@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userService from './services/UserService';
+import Modal from './Modal';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ const RegisterPage = () => {
     email: '',
     password: '',
   });
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,7 +22,11 @@ const RegisterPage = () => {
     userService.createUser(userDetails)
       .then(() => {
         console.log('User registered:', userDetails);
-        navigate('/');
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+          navigate('/login');
+        }, 1500);
       })
       .catch(error => {
         console.error('Error creating user:', error);
@@ -65,6 +71,9 @@ const RegisterPage = () => {
           />
         </div>
         <button type="submit" className="auth-form-button">Register</button>
+        <Modal isOpen={showModal} title="Registration Status">
+        Registered successfully!
+        </Modal>
       </form>
     </div>
   );

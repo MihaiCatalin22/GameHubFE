@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import reviewService from '../services/ReviewService';
 import { useAuth } from '../../contexts/authContext';
+import Modal from '../Modal';
 
 const ReviewSubmissionPage = () => {
     const { gameId } = useParams();
@@ -9,15 +10,21 @@ const ReviewSubmissionPage = () => {
     const { user } = useAuth();
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
 
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
         if (!rating || !reviewText.trim()) {
-            alert("Please fill in both rating and review text.");
+            setModalMessage("Please fill in both rating and review text.");
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
             return;
         }
         if (!user) {
-            alert("You must be logged in to submit a review.");
+            setModalMessage("You must be logged in to submit a review.");
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
             return;
         }
         const reviewData = { rating, content: reviewText };
@@ -26,13 +33,19 @@ const ReviewSubmissionPage = () => {
         try {
             const response = await reviewService.addReview(gameId, reviewData, user.id);
             console.log("Review submitted successfully:", response.data);
-            alert('Review submitted successfully!');
-            navigate(`/games/${gameId}`);
-            setRating(0);
-            setReviewText('');
+            setModalMessage('Review submitted successfully!');
+            setShowModal(true);
+            setTimeout(() => {
+                setShowModal(false);
+                navigate(`/games/${gameId}`);
+                setRating(0);
+                setReviewText('');
+            }, 2000);
         } catch (error) {
             console.error('Error submitting review:', error.response ? error.response.data : error.message);
-            alert('Failed to submit review: ' + (error.response ? error.response.data : "No response data available"));
+            setModalMessage('Failed to submit review: ' + (error.response ? error.response.data : "No response data available"));
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
         }
     };
     const handleBack = () => {
@@ -65,6 +78,9 @@ const ReviewSubmissionPage = () => {
                 <input type="submit" className='button' value="Submit Review" />
             </form>
             <button onClick={handleBack} className='button'>Go Back</button>
+            {showModal && <Modal isOpen={showModal} title="Review Submission Status">
+                {modalMessage}
+            </Modal>}
         </div>
     );
 };

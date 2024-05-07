@@ -24,7 +24,7 @@ import PastEvents from './components/events/PastEventsPage';
 import EditGamePage from './components/game/EditGamePage';
 import UserPosts from './components/user/UserPosts';
 import UserReviews from './components/user/UserReviews';
-import AboutPage from './layoutComponents/About';
+import AboutPage from './components/About';
 
 const App = () => {
   return (

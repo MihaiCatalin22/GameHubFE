@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import EventService from '../services/EventService';
+import Modal from '../Modal';
 
 const EventForm = ({ onEventSaved, existingEvent }) => {
   const [name, setName] = useState(existingEvent ? existingEvent.name : '');
   const [description, setDescription] = useState(existingEvent ? existingEvent.description : '');
   const [startDate, setStartDate] = useState(existingEvent ? existingEvent.startDate : '');
   const [endDate, setEndDate] = useState(existingEvent ? existingEvent.endDate : '');
-
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const isUpdate = existingEvent && existingEvent.id;
 
   const handleSubmit = async (e) => {
@@ -17,19 +19,25 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
       let response;
       if (isUpdate) {
         response = await EventService.updateEvent(existingEvent.id, eventData);
-        alert('Event updated successfully!');
+        setModalMessage('Event updated successfully!');
       } else {
         response = await EventService.createEvent(eventData);
-        alert('Event created successfully!');
+        setModalMessage('Event created successfully!');
       }
-      onEventSaved(response.data);
-      setName('');
-      setDescription('');
-      setStartDate('');
-      setEndDate('');
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        onEventSaved(response.data);
+        setName('');
+        setDescription('');
+        setStartDate('');
+        setEndDate('');
+      }, 2000);
     } catch (error) {
       console.error('Failed to save event:', error);
-      alert(`Failed to ${isUpdate ? 'update' : 'create'} event.`);
+      setModalMessage(`Failed to ${isUpdate ? 'update' : 'create'} event.`);
+      setShowModal(true);
+      setTimeout(() => setShowModal(false), 2000);
     }
   };
 
@@ -76,6 +84,9 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
           />
         </div>
         <button type="submit" className="event-form-button">{isUpdate ? 'Update Event' : 'Create Event'}</button>
+        {showModal && <Modal isOpen={showModal} title="Event Submission Status">
+        {modalMessage}
+      </Modal>}
       </form>
     </div>
   );

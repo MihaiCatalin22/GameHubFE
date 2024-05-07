@@ -1005,6 +1005,7 @@ button:focus-visible {
   max-width: 200px;
   margin-bottom: 20px;
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #213547;

@@ -1,20 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext'; 
+import Modal from './Modal';
 
 const LogoutPage = () => {
     const navigate = useNavigate();
     const { logoutUser } = useAuth();
+    const [showModal, setShowModal] = useState(true);
 
     useEffect(() => {
-        logoutUser();
-        navigate('/');
+        const timer = setTimeout(() => {
+            logoutUser(); 
+            navigate('/'); 
+        }, 1500);
+
+        return () => clearTimeout(timer);
     }, [logoutUser, navigate]);
 
     return (
-        <div>
-            Logging out...
-        </div>
+        <Modal 
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            title="Logging Out"
+        >
+            Logging out, please wait...
+        </Modal>
     );
 };
 

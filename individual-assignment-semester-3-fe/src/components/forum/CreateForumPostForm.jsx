@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import forumService from '../services/ForumService';
 import categoryService from "../services/CategoryService";
 import { useAuth } from "../../contexts/authContext";
+import Modal from '../Modal';
 
 const CreateForumPostForm = () => {
   const [title, setTitle] = useState('');
@@ -9,6 +11,9 @@ const CreateForumPostForm = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const { user } = useAuth();
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     categoryService.getCategories()
@@ -16,7 +21,12 @@ const CreateForumPostForm = () => {
         setCategories(response.data);
         setSelectedCategory(response.data[0]);
       })
-      .catch(error => console.error('Error fetching categories:', error));
+      .catch(error => {
+        console.error('Error fetching categories:', error);
+        setModalMessage('Failed to fetch categories.');
+        setShowModal(true);
+        setTimeout(() => setShowModal(false), 2000);
+      });
   }, []);
 
   const handleSubmit = (e) => {
@@ -32,11 +42,17 @@ const CreateForumPostForm = () => {
       .then(response => {
         setTitle('');
         setContent('');
-        alert('Post created successfully!');
-        console.log('Post created:', response.data);
+        setModalMessage('Post created successfully!');
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+          navigate('/forum'); 
+        }, 2000);
       })
       .catch(error => {
-        alert('Failed to create the post. Please try again.');
+        setModalMessage('Failed to create the post. Please try again.');
+        setShowModal(true);
+        setTimeout(() => setShowModal(false), 2000);
         console.error('Error creating post:', error);
       });
     }
@@ -91,6 +107,9 @@ return (
       <button type="submit" className="game-form-button">
         Create Post
       </button>
+      {showModal && <Modal isOpen={showModal} title="Forum Post Submission">
+      {modalMessage}
+    </Modal>}
     </form>
   </div>
 );

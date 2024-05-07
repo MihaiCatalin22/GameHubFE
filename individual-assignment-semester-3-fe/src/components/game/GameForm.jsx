@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import gameService from '../services/GameService';
 import GenreTagsInput from './GenreTagsInput';
 import { useAuth } from '../../contexts/authContext';
+import Modal from '../Modal';
 
 const GameForm = ({ onSave, initialData }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const GameForm = ({ onSave, initialData }) => {
   });
   const { user } = useAuth();
   const [selectedGenres, setSelectedGenres] = useState(initialData?.genres || []);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     if (initialData) {
@@ -32,18 +35,28 @@ const GameForm = ({ onSave, initialData }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const gameData = { ...formData, genres: selectedGenres };
-    try {
-        const response = initialData?.id ? await gameService.updateGame(initialData.id, gameData) : await gameService.createGame(gameData);
-        onSave(response.data);
-    } catch (error) {
-        console.error('Error saving game:', error);
-    }
-};
-   if (!user || !user.role.includes('ADMINISTRATOR')) {
-    return <div className="no-game-selected">You do not have permission to modify game details.</div>;
-  }
+        e.preventDefault();
+        if (!user || !user.role.includes('ADMINISTRATOR')) {
+            setModalMessage("You do not have permission to modify game details.");
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
+            return;
+        }
+        const gameData = { ...formData, genres: selectedGenres };
+        try {
+            const response = initialData?.id ? await gameService.updateGame(initialData.id, gameData) : await gameService.createGame(gameData);
+            onSave(response.data);
+            setModalMessage('Game details saved successfully!');
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
+        } catch (error) {
+            console.error('Error saving game:', error);
+            setModalMessage('Failed to save game details. Please try again.');
+            setShowModal(true);
+            setTimeout(() => setShowModal(false), 2000);
+        }
+    };
+
   return (
     <div className="game-form">
       <div className="game-form-container">
@@ -106,6 +119,9 @@ const GameForm = ({ onSave, initialData }) => {
           <button type="submit" className="button">
             Save Game
           </button>
+          {showModal && <Modal isOpen={showModal} title="Game Update Status">
+                {modalMessage}
+            </Modal>}
         </form>
       </div>
     </div>
