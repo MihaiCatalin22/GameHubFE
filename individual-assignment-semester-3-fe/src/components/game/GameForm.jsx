@@ -11,6 +11,7 @@ const GameForm = ({ onSave, initialData }) => {
     releaseDate: '',
     description: '',
     developer: '',
+    price: '',
   });
   const { user } = useAuth();
   const [selectedGenres, setSelectedGenres] = useState(initialData?.genres || []);
@@ -24,6 +25,7 @@ const GameForm = ({ onSave, initialData }) => {
         releaseDate: initialData.releaseDate || '',
         description: initialData.description || '',
         developer: initialData.developer || '',
+        price: initialData.price || '',
       });
       setSelectedGenres(initialData.genres || []);
     }
@@ -112,6 +114,20 @@ const GameForm = ({ onSave, initialData }) => {
               value={formData.developer}
               onChange={handleChange}
               placeholder="Developer Name"
+              className="w-full px-3 py-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="price" className="block mb-2">Price (€)</label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="Game Price"
+              step="0.01"
               className="w-full px-3 py-2 border rounded"
               required
             />

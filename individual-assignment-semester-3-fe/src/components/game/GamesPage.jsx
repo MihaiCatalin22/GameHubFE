@@ -53,6 +53,8 @@ const GamesPage = () => {
       genres: [],
       releaseDate: '',
       description: '',
+      developer: '',
+      price: '',
     });
   };
 

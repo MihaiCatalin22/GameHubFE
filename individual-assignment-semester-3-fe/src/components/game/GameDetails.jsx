@@ -101,6 +101,7 @@ const GameDetailsPage = () => {
           <h1>{game.title}</h1>
           <p>{game.description}</p>
           {game.genres && <p>Genres: {game.genres.join(', ')}</p>}
+          <p>Price: {game.price} €</p>
           <div className="average-rating">
             Average Rating: {averageRating} / 5.0
           </div>
