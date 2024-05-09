@@ -42,32 +42,72 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 /* Forum Page Styles */
+.forum-posts-list-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838; /* Steam dark background */
+  color: #e8e8e8; /* Light text color */
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.forum-posts-list-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8; /* Light title color */
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.user-search-input {
+  padding: 0.6em 1em;
+  margin-bottom: 1.5rem;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #50a3b3;
+  background-color: #101820;
+  color: white;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-search-input::placeholder {
+  color: #888;
+}
+
 .forum-posts-list {
-  list-style-type: none; 
-  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .forum-post-item {
-  cursor: pointer;
+  background-color: #101820;
+  color: #e8e8e8;
   padding: 1rem;
-  margin: 0.5rem 0;
-  background-color: #121212;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
 }
 
 .forum-post-item:hover {
   background-color: #50a3b3;
+  transform: scale(1.02);
 }
 
 .forum-post-title {
   font-size: 1.25rem;
   font-weight: bold;
+  margin: 0 0 0.5rem 0;
 }
 
 .forum-post-content {
   font-size: 1rem;
-  color: white;
+  color: #bbbbbb;
+  margin-bottom: 0.5rem;
 }
 
 .forum-post-date {
@@ -92,10 +132,74 @@ button:focus-visible {
   font-size: 0.875rem;
   color: #888;
 }
-/* User list styles */
+.user-list-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838; /* Steam dark background */
+  color: #e8e8e8; /* Light text color */
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.user-list-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8; /* Light title color */
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.user-search-input {
+  padding: 0.6em 1em;
+  margin-bottom: 1.5rem;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #50a3b3;
+  background-color: #101820;
+  color: white;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-search-input::placeholder {
+  color: #888;
+}
+
 .user-list {
   list-style-type: none;
-  padding-left: 0; 
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.user-list-item:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02); 
+}
+
+.user-list-item a {
+  color: #e8e8e8;
+  font-size: 1.25rem;
+  text-decoration: none;
+}
+
+.user-list-item a:hover {
+  color: #ffffff;
 }
 .profile-picture {
   width: 125px;
@@ -105,19 +209,7 @@ button:focus-visible {
   border: 2px solid #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
 }
-.user-list li {
-  padding: 0.5em;
-  margin: 0.5em 0;
-}
 
-.user-list li a {
-  color: #646cff;
-  text-decoration: none;
-}
-
-.user-list li a:hover {
-  color: #535bf2;
-}
 /* Games Styles */
 .games-list {
   list-style-type: none;
@@ -1005,7 +1097,318 @@ button:focus-visible {
   max-width: 200px;
   margin-bottom: 20px;
 }
+.purchases-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838;
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
 
+.purchases-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.filter label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: #bbbbbb; 
+}
+
+.filter input {
+  padding: 0.6em 1em;
+  background-color: #0b1a25; 
+  color: #e8e8e8;
+  border: 1px solid #465a68;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.filter input:focus {
+  border-color: #50a3b3;
+}
+.purchases-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.purchases-list li {
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+.purchases-list li:hover {
+  background-color: #50a3b3;
+}
+
+.purchase-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.purchase-details {
+  font-size: 1rem;
+  color: #bbbbbb;
+}
+
+.purchase-date {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.library-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838;
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.library-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.library-games-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.library-game-item {
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
+}
+
+.library-game-item:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02);
+}
+
+.library-game-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.user-reviews-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838;
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.user-reviews-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8; 
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.reviews-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.review-item {
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
+}
+
+.review-item:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02); 
+}
+
+.review-content {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.review-link {
+  font-weight: bold;
+  color: #e8e8e8;
+  text-decoration: none;
+}
+
+.review-link:hover {
+  color: #ffffff;
+}
+
+.user-posts-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838; 
+  color: #e8e8e8; 
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.user-posts-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8; 
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.posts-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.post-item {
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
+}
+
+.post-item:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02); 
+}
+
+.post-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.post-link {
+  font-weight: bold;
+  color: #e8e8e8;
+  text-decoration: none;
+}
+
+.post-link:hover {
+  color: #ffffff;
+}
+
+.games-list-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838; 
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.games-list-page h2 {
+  font-size: 2rem;
+  color: #e8e8e8;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.user-search-input {
+  padding: 0.6em 1em;
+  margin-bottom: 1.5rem;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #50a3b3;
+  background-color: #101820;
+  color: white;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-search-input::placeholder {
+  color: #888;
+}
+
+.game-summary {
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
+}
+
+.game-summary:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02);
+}
+
+.game-summary h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.add-game-button {
+  padding: 0.6em 1em;
+  background-color: #50a3b3;
+  color: #e8f0fe;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  margin-top: 2rem;
+}
+
+.add-game-button:hover {
+  background-color: #378b8a;
+}
+
+.add-game-button:focus,
+.add-game-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
 @media (prefers-color-scheme: dark) {
   :root {
     color: #213547;

@@ -21,13 +21,16 @@ const getAllGames = () => {
   const deleteGame = (gameId) => {
     return axios.delete(`${API_URL}/${gameId}`);
   };
-  
+  const getGamesByUserId = (userId) => {
+    return axios.get(`${API_URL}/user/${userId}`);
+  };
   const gameService = {
     getAllGames,
     getGameById,
     createGame,
     updateGame,
-    deleteGame
+    deleteGame,
+    getGamesByUserId
   };
   
   export default gameService;

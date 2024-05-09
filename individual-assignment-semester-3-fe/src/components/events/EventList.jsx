@@ -73,7 +73,7 @@ const EventList = () => {
         </button>
     )}
     {addingEvent ? (
-        <EventForm onEventCreated={handleEventCreated} />
+        <EventForm onEventCreated={handleEventSaved} />
     ) : (
         filteredEvents.length > 0 ? filteredEvents.map(event => (
           <div key={event.id} className="event-item">

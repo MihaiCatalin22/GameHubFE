@@ -31,7 +31,6 @@ const UserDetailPage = () => {
   if (!userDetails) {
     return <div>Loading user details...</div>;
   }
-
   const profilePictureUrl = userDetails.profilePicture
     ? `http://localhost:8080/images/${userDetails.profilePicture}`
     : 'http://localhost:8080/images/default_image.jpg';
@@ -45,6 +44,7 @@ const UserDetailPage = () => {
       <p className="profile-detail">Bio: {userDetails.description}</p>
       <button onClick={() => navigate(`/user/${userId}/posts`)} className="button">View user's posts</button>
       <button onClick={() => navigate(`/user/${userId}/reviews`)} className="button">View user's reviews</button>
+      <button onClick={() => navigate(`/user/${userId}/library`)} className="button">View user's games</button>
     </div>
   );
 };

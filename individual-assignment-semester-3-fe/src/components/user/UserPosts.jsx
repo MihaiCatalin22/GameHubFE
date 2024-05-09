@@ -32,13 +32,15 @@ const UserPosts = () => {
   if (!posts.length) return <p>No posts found.</p>;
 
   return (
-    <div>
+    <div className="user-posts-page">
       <h2>User's Posts</h2>
-      {posts.map(post => (
-        <div key={post.id}>
-          <Link to={`/forum/${post.id}`}>{post.title}</Link>
-        </div>
-      ))}
+      <ul className="posts-list">
+        {posts.map(post => (
+          <li key={post.id} className="post-item">
+            <Link to={`/forum/${post.id}`} className="post-link">{post.title}</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

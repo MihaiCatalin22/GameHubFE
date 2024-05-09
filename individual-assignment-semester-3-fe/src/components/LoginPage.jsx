@@ -22,7 +22,7 @@ const LoginPage = () => {
           username: response.username,
           token: response.jwt
         });
-        navigate('/forum');
+        navigate('/');
       } else {
         setError("Authentication token not received.");
       }

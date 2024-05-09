@@ -5,7 +5,7 @@ import reviewService from '../services/ReviewService';
 import ReviewsList from '../review/ReviewList';
 import GameForm from './GameForm';
 import { useAuth } from '../../contexts/authContext';
-
+import purchaseService from '../services/PurchaseService';
 
 const GameDetailsPage = () => {
     const { gameId } = useParams();
@@ -16,7 +16,8 @@ const GameDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const { user } = useAuth();
-    const [editMode, setEditMode] = useState(false);
+    const [purchaseMessage, setPurchaseMessage] = useState('');
+    const [purchaseLoading, setPurchaseLoading] = useState(false);
 
 
     useEffect(() => {
@@ -40,11 +41,13 @@ const GameDetailsPage = () => {
 
       fetchData();
   }, [gameId]);
+
     const calculateAverageRating = (reviews) => {
       if (!reviews.length) return 0;
       const total = reviews.reduce((acc, review) => acc + review.rating, 0);
       return (total / reviews.length).toFixed(1);
     };
+
     const handleDeleteGame = async () => {
       if (window.confirm('Are you sure you want to delete this game?')) {
         await gameService.deleteGame(gameId);
@@ -58,12 +61,31 @@ const GameDetailsPage = () => {
   
     if (!game) return <div>Loading...</div>;
   
-    
-
     const handleReviewButton = () => {
       navigate(`/games/${gameId}/review`);
     };
-  
+    
+    const handlePurchaseGame = async () => {
+      if (!user) {
+          setPurchaseMessage('Please log in to purchase.');
+          return;
+      }
+
+      setPurchaseLoading(true);
+      setPurchaseMessage('');
+
+      try {
+          await purchaseService.purchaseGame(user.id, gameId);
+          setPurchaseMessage('Purchase successful!');
+      } catch (error) {
+          setPurchaseMessage(
+              'Purchase failed: ' + (error.response?.data || error.message)
+          );
+      } finally {
+          setPurchaseLoading(false);
+      }
+  };
+
     if (loading) {
       return <p>Loading...</p>;
     }
@@ -88,6 +110,18 @@ const GameDetailsPage = () => {
               <button onClick={handleDeleteGame} className="button">Delete Game</button>
             </>
           )}
+          {user ? (
+                        <button
+                            onClick={handlePurchaseGame}
+                            disabled={purchaseLoading}
+                            className="button"
+                        >
+                            {purchaseLoading ? 'Processing...' : 'Purchase'}
+                        </button>
+                    ) : (
+                        <p>Please log in to purchase this game.</p>
+                    )}
+                    {purchaseMessage && <p>{purchaseMessage}</p>}
           <button onClick={handleReviewButton} className="button">Write a Review</button>
           <ReviewsList reviews={reviews} />
         </>

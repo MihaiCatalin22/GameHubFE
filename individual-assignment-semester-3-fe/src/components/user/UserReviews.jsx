@@ -27,16 +27,19 @@ const UserReviews = () => {
   if (!reviews.length) return <p>No reviews found.</p>;
 
   return (
-    <div>
+    <div className="user-reviews-page">
       <h2>User's Reviews</h2>
-      {reviews.map(review => (
-        <div key={review.id}>
-          {review.gameId ?
-            <Link to={`/games/${review.gameId}`}>{review.content}</Link> :
-            <p>Review for deleted or unavailable game</p>
-          }
-        </div>
-      ))}
+      <ul className="posts-list">
+        {reviews.map(review => (
+          <li key={review.id} className="review-item">
+            {review.gameId ? (
+              <Link to={`/games/${review.gameId}`} className="review-link">{review.content}</Link>
+            ) : (
+              <p>Review for deleted or unavailable game</p>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

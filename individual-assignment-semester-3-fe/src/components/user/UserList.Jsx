@@ -29,7 +29,7 @@ const UserList = () => {
   );
 
   return (
-    <div>
+    <div className="user-list-page">
       <h2>Users</h2>
       <input
         type="text"
@@ -40,7 +40,7 @@ const UserList = () => {
       />
       <ul className="user-list">
         {filteredUsers.map(user => (
-          <li key={user.id}>
+          <li key={user.id} className="user-list-item">
             <Link to={`/users/${user.id}`}>{user.username}</Link>
             {hasRole('ADMINISTRATOR') && (
               <button onClick={() => handleDeleteUser(user.id)} className='button'>

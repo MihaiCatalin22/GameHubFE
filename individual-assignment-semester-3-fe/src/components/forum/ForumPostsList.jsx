@@ -19,8 +19,8 @@ const ForumPostsList = ({ posts }) => {
   );
 
   return (
-    <div className="my-4">
-      <h2 className="text-2xl text-center font-bold mb-4">Forum Posts</h2>
+    <div className="forum-posts-list-page">
+      <h2>Forum Posts</h2>
       <input
         type="text"
         className="user-search-input"
@@ -33,7 +33,7 @@ const ForumPostsList = ({ posts }) => {
           <div
             key={post.id}
             onClick={() => handleSelectPost(post.id)}
-            className="forum-post-item cursor-pointer"
+            className="forum-post-item"
           >
             <h3 className="forum-post-title">{post.title}</h3>
             <p className="forum-post-content">{post.content.substring(0, 100)}...</p>

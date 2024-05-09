@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import eventService from "../services/EventService";
 import { useAuth } from "../../contexts/authContext";
+import Modal from "../Modal";
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -9,6 +10,9 @@ const EventDetails = () => {
   const [timeLeft, setTimeLeft] = useState({});
   const [eventEnded, setEventEnded] = useState(false);
   const { user } = useAuth();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -52,35 +56,48 @@ const EventDetails = () => {
       try {
         const payload = { userId: user.id };
         const response = await eventService.addParticipant(eventId, payload);
-        alert('You have joined the event');
+        showModal('Success', 'You have joined the event.');
         setEvent(previousEvent => ({
           ...previousEvent,
           participants: [...previousEvent.participants, user]
         }));
       } catch (error) {
         console.error('Failed to join event:', error);
-        alert('Failed to join event. Please try again.');
+        showModal('Error', 'Failed to join event. Please try again.');
       }
     } else {
-      alert('You must be logged in to join the event');
+      showModal('Error', 'You must be logged in to join the event.');
     }
   };
+
   const handleLeaveEvent = async () => {
     if (user && user.id) {
       try {
         await eventService.removeParticipant(eventId, user.id);
-        alert('You have left the event');
+        showModal('Success', 'You have left the event.');
         const updatedEvent = await eventService.getEventById(eventId);
         setEvent(updatedEvent.data);
       } catch (error) {
         console.error('Failed to leave event:', error);
-        alert('Failed to leave event. Please try again.');
+        showModal('Error', 'Failed to leave event. Please try again.');
       }
     }
-  }
-    const isParticipant = () => {
-      return event && event.participants.some(participant => participant.id === user.id);
-    };
+  };
+
+  const isParticipant = () => {
+    return event && event.participants.some(participant => participant.id === user.id);
+  };
+
+  const showModal = (title, message) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   if (!event) {
     return <div>Loading event details...</div>;
   }
@@ -105,7 +122,13 @@ const EventDetails = () => {
           )}
           <p>Participants: {event.participants.length}</p>
         </>
-        )}
+      )}
+      <Modal isOpen={modalOpen} title={modalTitle} onClose={closeModal}>
+        <p>{modalMessage}</p>
+        <div className="modal-footer">
+          <button onClick={closeModal} className="modal-button">OK</button>
+        </div>
+      </Modal>
     </div>
   );
 };

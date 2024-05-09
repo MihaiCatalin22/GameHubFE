@@ -21,7 +21,13 @@ const UserProfile = () => {
   const handleViewReviews = () => {
     navigate(`/user/${user.id}/reviews`);
   };
+  const handleViewPurchases = () => {
+    navigate(`/user/${user.id}/purchases`);
+  };
 
+  const handleViewLibrary = () => {
+    navigate(`/user/${user.id}/library`);
+  };
   return (
     <div className="profile-content">
       <h2 className="profile-header">Your Profile</h2>
@@ -32,6 +38,8 @@ const UserProfile = () => {
       <button onClick={handleEditProfile} className="button">Edit Profile</button>
       <button onClick={handleViewPosts} className="button">Your Posts</button>
       <button onClick={handleViewReviews} className="button">Your Reviews</button>
+      <button onClick={handleViewPurchases} className="button">Your Purchases</button>
+      <button onClick={handleViewLibrary} className="button">Game Library</button>
     </div>
   );
 };

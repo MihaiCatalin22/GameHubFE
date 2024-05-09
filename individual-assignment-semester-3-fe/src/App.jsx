@@ -25,6 +25,9 @@ import EditGamePage from './components/game/EditGamePage';
 import UserPosts from './components/user/UserPosts';
 import UserReviews from './components/user/UserReviews';
 import AboutPage from './components/About';
+import PurchasesPage from './components/purchases/PurchasesPage';
+import LibraryPage from './components/user/LibraryPage';
+
 
 const App = () => {
   return (
@@ -41,6 +44,8 @@ const App = () => {
               <Route path="/games" element={<GamesPage />} />
               <Route path="/gamelist" element={<GamesList />} />
               <Route path="/games/:gameId" element={<GameDetailsPage />} />
+              <Route path="/user/:userId/purchases" element={<PurchasesPage />} />
+              <Route path="/user/:userId/library" element={<LibraryPage />} />
               <Route path="/games/:gameId/review" element={<ReviewSubmissionPage />} />
               <Route path="/games/edit/:gameId" element={<EditGamePage />} />
               <Route path="/users" element={<UsersListPage />} />
