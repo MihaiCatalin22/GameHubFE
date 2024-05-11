@@ -291,6 +291,55 @@ button:focus-visible {
   font-size: 1rem;
   color: #bbbbbb; 
 }
+.recommendations-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838; 
+  color: #e8e8e8; 
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.recommendations-container h2 {
+  font-size: 2rem;
+  color: #e8e8e8;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recommendations-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.recommendations-item {
+  background-color: #101820;
+  color: #e8e8e8;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
+}
+
+.recommendations-item:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02);
+}
+
+.recommendations-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.recommendations-genres {
+  font-size: 1rem;
+  color: #bbbbbb;
+}
 /* Search box styles */
 .user-search-input {
   padding: 0.6em 1em;

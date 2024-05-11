@@ -27,7 +27,7 @@ import UserReviews from './components/user/UserReviews';
 import AboutPage from './components/About';
 import PurchasesPage from './components/purchases/PurchasesPage';
 import LibraryPage from './components/user/LibraryPage';
-
+import Recommendations from './components/game/Recommendations';
 
 const App = () => {
   return (
@@ -60,6 +60,7 @@ const App = () => {
               <Route path="/past-events" element={<PastEvents/>} />
               <Route path="/events/edit/:eventId" element={<UpdateEventPage />} />
               <Route path="/logout" element={<LogoutPage/>} />
+              <Route path="/recommendations/:userId" element={<Recommendations />} />
               <Route path="/" element={<AboutPage/>} />
             </Routes>
             <Footer />

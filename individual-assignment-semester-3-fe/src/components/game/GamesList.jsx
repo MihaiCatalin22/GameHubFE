@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import gameService from "../services/GameService";
 import { useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
 import { useAuth } from '../../contexts/authContext';
+import Recommendations from "./Recommendations";
 
 const GamesList = ({ onSelect }) => {
   const navigate = useNavigate();
@@ -56,6 +56,7 @@ const GamesList = ({ onSelect }) => {
             Add New Game
           </button>
         )}
+        <Recommendations />
       </div>
     );
   };
