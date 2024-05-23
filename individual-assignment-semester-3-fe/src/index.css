@@ -10,7 +10,6 @@
   text-align: center;
   
 }
-
 a {
   font-weight: 500;
   color: #646cff;
@@ -1453,7 +1452,71 @@ button:focus-visible {
 .add-game-button:hover {
   background-color: #378b8a;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+.pagination__page {
+  margin: 0 0.5rem;
+}
+.pagination__link {
+  margin: 0 0.5rem;
+  cursor: pointer;
+  color: #50a3b3;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background-color: #202020;
+  transition: background-color 0.2s, color 0.2s;
+}
 
+.pagination__link:hover {
+  background-color: #50a3b3;
+  color: #ffffff;
+}
+
+.pagination__link--disabled {
+  color: #c0c0c0;
+  cursor: not-allowed;
+  background-color: #101010;
+}
+
+.pagination__link--active {
+  font-weight: bold;
+  text-decoration: underline;
+  background-color: #50a3b3;
+  color: #ffffff;
+}
+.past-events-button {
+  margin: 10px 0;
+  padding: 0.6em 1em;
+  background-color: #50a3b3;
+  color: #e8f0fe;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+.participation-tag {
+  background-color: #50a3b3;
+  color: white;
+  padding: 0.2em 0.5em;
+  border-radius: 8px;
+  font-size: 0.8em;
+  top: 10px;
+  right: 10px;
+}
+.past-events-button:hover {
+  background-color: #378b8a;
+}
+
+.past-events-button:focus,
+.past-events-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
 .add-game-button:focus,
 .add-game-button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

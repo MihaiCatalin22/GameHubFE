@@ -4,7 +4,7 @@ import forumService from "../services/ForumService";
 import CommentsList from "./CommentsList";
 import CommentForm from "./CommentForm";
 import { useAuth } from '../../contexts/authContext';
-
+import Modal from "../Modal";
 
 const ForumPostDetails = () => {
   const { postId } = useParams();
@@ -12,6 +12,11 @@ const ForumPostDetails = () => {
   const [comments, setComments] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isCommentDeleteModalOpen, setIsCommentDeleteModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [commentToDelete, setCommentToDelete] = useState(null);
 
   useEffect(() => {
     forumService.getPostById(postId)
@@ -52,29 +57,50 @@ const ForumPostDetails = () => {
   const canDelete = user && user.role.includes('ADMINISTRATOR');
 
   const handleDeletePost = () => {
-    if (canDelete) {
-      forumService.deletePost(postId)
-        .then(() => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeletePost = () => {
+    setIsDeleteModalOpen(false);
+    setIsConfirmModalOpen(true);
+    forumService.deletePost(postId)
+      .then(() => {
+        setModalMessage('Post deleted successfully.');
+        setTimeout(() => {
+          setIsConfirmModalOpen(false);
           navigate("/forum");
-        })
-        .catch(error => {
-          console.error("Error deleting the post:", error);
-        });
-    }
+        }, 2000);
+      })
+      .catch(error => {
+        console.error("Error deleting the post:", error);
+        setModalMessage('Failed to delete post.');
+        setIsConfirmModalOpen(true);
+      });
   };
 
   const handleDeleteComment = (commentId) => {
     if (canDelete) {
-      forumService.deleteComment(postId, commentId)
-        .then(() => {
-          setComments(currentComments => currentComments.filter(c => c.id !== commentId));
-        })
-        .catch(error => {
-          console.error("Error deleting comment:", error);
-        });
+      setCommentToDelete(commentId);
+      setIsCommentDeleteModalOpen(true);
     }
   };
-  
+
+  const confirmDeleteComment = () => {
+    setIsCommentDeleteModalOpen(false);
+    forumService.deleteComment(postId, commentToDelete)
+      .then(() => {
+        setComments(currentComments => currentComments.filter(c => c.id !== commentToDelete));
+        setCommentToDelete(null);
+        setModalMessage('Comment deleted successfully.');
+        setIsConfirmModalOpen(true);
+      })
+      .catch(error => {
+        console.error("Error deleting comment:", error);
+        setModalMessage('Failed to delete comment.');
+        setIsConfirmModalOpen(true);
+      });
+  };
+
   if (!post) {
     return <div>Loading post...</div>;
   }
@@ -111,6 +137,33 @@ const ForumPostDetails = () => {
         <CommentsList comments={comments} onDelete={handleDeleteComment} canDelete={canDelete}/>
         <CommentForm postId={postId} onCommentSubmit={handleCommentSubmit} />
       </section>
+      <Modal 
+        isOpen={isDeleteModalOpen} 
+        title="Confirm Deletion" 
+        onClose={() => setIsDeleteModalOpen(false)} 
+        onConfirm={confirmDeletePost}
+        showConfirmButton={true}
+        showCancelButton={true}
+      >
+        Are you sure you want to delete this post?
+      </Modal>
+      <Modal 
+        isOpen={isCommentDeleteModalOpen} 
+        title="Confirm Comment Deletion" 
+        onClose={() => setIsCommentDeleteModalOpen(false)} 
+        onConfirm={confirmDeleteComment}
+        showConfirmButton={true}
+        showCancelButton={true}
+      >
+        Are you sure you want to delete this comment?
+      </Modal>
+      <Modal 
+        isOpen={isConfirmModalOpen} 
+        title="Deletion Status" 
+        onClose={() => setIsConfirmModalOpen(false)}
+      >
+        {modalMessage}
+      </Modal>
     </div>
   );
 };

@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
 import userService from '../services/UserService';
+import ReactPaginate from 'react-paginate';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const { hasRole } = useAuth();  
+  const [pageNumber, setPageNumber] = useState(0);
+  const usersPerPage = 5;
+  const pagesVisited = pageNumber * usersPerPage;
 
   useEffect(() => {
     userService.getAllUsers()
@@ -27,6 +31,24 @@ const UserList = () => {
   const filteredUsers = users.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const handlePageClick = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
+  const displayUsers = filteredUsers
+    .slice(pagesVisited, pagesVisited + usersPerPage)
+    .map(user => (
+      <li key={user.id} className="user-list-item">
+        <Link to={`/users/${user.id}`}>{user.username}</Link>
+        {hasRole('ADMINISTRATOR') && (
+          <button onClick={() => handleDeleteUser(user.id)} className='button'>
+            Delete User
+          </button>
+        )}
+      </li>
+    ));
+
+  const pageCount = Math.ceil(filteredUsers.length / usersPerPage);
 
   return (
     <div className="user-list-page">
@@ -39,17 +61,21 @@ const UserList = () => {
         onChange={handleSearchChange}
       />
       <ul className="user-list">
-        {filteredUsers.map(user => (
-          <li key={user.id} className="user-list-item">
-            <Link to={`/users/${user.id}`}>{user.username}</Link>
-            {hasRole('ADMINISTRATOR') && (
-              <button onClick={() => handleDeleteUser(user.id)} className='button'>
-                Delete User
-              </button>
-            )}
-          </li>
-        ))}
+        {displayUsers}
       </ul>
+      <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        pageCount={pageCount}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination"}
+        pageClassName={"pagination__page"}
+        pageLinkClassName={"pagination__link"}
+        previousLinkClassName={"pagination__link"}
+        nextLinkClassName={"pagination__link"}
+        disabledClassName={"pagination__link--disabled"}
+        activeClassName={"pagination__link--active"}
+      />
     </div>
   );
 };

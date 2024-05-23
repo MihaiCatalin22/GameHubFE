@@ -15,9 +15,14 @@ const getPurchases = (userId, fromDate, minAmount, maxAmount) => {
     return axios.get(`${API_URL}/${userId}`, { params });
 };
 
+const checkOwnership = async (userId, gameId) => {
+    return await axios.get(`${API_URL}/owns`, { params: { userId, gameId } });
+  };
+
 const purchaseService = {
     purchaseGame,
-    getPurchases
+    getPurchases,
+    checkOwnership
 };
 
 export default purchaseService;

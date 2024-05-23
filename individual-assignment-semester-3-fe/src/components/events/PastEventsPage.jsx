@@ -25,7 +25,7 @@ const PastEvents = () => {
                 <div key={event.id} className="event-item">
                     <h3>{event.name}</h3>
                     <p>{event.description}</p>
-                    <button onClick={() => navigate(`/events/${event.id}`)}>View Details</button>
+                    <button onClick={() => navigate(`/events/${event.id}`)} className="button">View Details</button>
                 </div>
             )) : (
                 <p>No past events found.</p>

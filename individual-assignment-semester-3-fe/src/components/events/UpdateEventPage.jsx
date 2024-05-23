@@ -26,7 +26,7 @@ const UpdateEventPage = () => {
         <div>
             <h1>Update Event</h1>
             {event ? (
-                <EventForm event={event} onEventSaved={handleEventUpdated} />
+                <EventForm existingEvent={event} onEventSaved={handleEventUpdated} />
             ) : (
                 <p>Loading...</p>
             )}

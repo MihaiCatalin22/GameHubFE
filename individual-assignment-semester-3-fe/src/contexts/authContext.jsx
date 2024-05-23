@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   const updateUserDetails = async (userData) => {
     try {
       const response = await userService.updateUser(userData.id, userData);
-      const updatedUser = {...userData, ...response.data, token: response.data.jwt || userData.token};
+      const updatedUser = { ...userData, ...response.data, token: response.data.jwt || userData.token };
       TokenManager.setAccessToken(updatedUser.token);
       setUser(updatedUser);
       sessionStorage.setItem('user', JSON.stringify(updatedUser));

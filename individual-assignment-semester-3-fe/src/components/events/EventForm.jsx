@@ -3,13 +3,22 @@ import EventService from '../services/EventService';
 import Modal from '../Modal';
 
 const EventForm = ({ onEventSaved, existingEvent }) => {
-  const [name, setName] = useState(existingEvent ? existingEvent.name : '');
-  const [description, setDescription] = useState(existingEvent ? existingEvent.description : '');
-  const [startDate, setStartDate] = useState(existingEvent ? existingEvent.startDate : '');
-  const [endDate, setEndDate] = useState(existingEvent ? existingEvent.endDate : '');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const isUpdate = existingEvent && existingEvent.id;
+
+  useEffect(() => {
+    if (existingEvent) {
+      setName(existingEvent.name);
+      setDescription(existingEvent.description);
+      setStartDate(existingEvent.startDate);
+      setEndDate(existingEvent.endDate);
+    }
+  }, [existingEvent]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,8 +94,8 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
         </div>
         <button type="submit" className="event-form-button">{isUpdate ? 'Update Event' : 'Create Event'}</button>
         {showModal && <Modal isOpen={showModal} title="Event Submission Status">
-        {modalMessage}
-      </Modal>}
+          {modalMessage}
+        </Modal>}
       </form>
     </div>
   );

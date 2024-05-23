@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
-import userService from '../services/UserService';
 import FileService from '../services/FileService';
 import Modal from '../Modal';
 import ProfilePictureUpload from './ProfilePictureUpload';
@@ -9,15 +8,30 @@ import ProfilePictureUpload from './ProfilePictureUpload';
 const EditProfile = () => {
     const { user, updateUserDetails } = useAuth();
     const [formData, setFormData] = useState({
-        username: user.username,
-        email: user.email || '',
-        description: user.description || '',
-        privacy: user.privacy || 'Public', 
+        username: user?.username || '',
+        email: user?.email || '',
+        description: user?.description || '',
+        privacy: user?.privacy || 'Public',
+        roles: user?.roles || []
     });
     const [profilePicture, setProfilePicture] = useState(null);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [modalConfirmed, setModalConfirmed] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            console.log('User ID:', user.id);
+            setFormData({
+                username: user.username,
+                email: user.email || '',
+                description: user.description || '',
+                privacy: user.privacy || 'Public',
+                roles: user.roles || []
+            });
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         setFormData({
@@ -37,17 +51,15 @@ const EditProfile = () => {
             setTimeout(() => setShowModal(false), 2000);
             return;
         }
-        
+
         const formData = new FormData();
         formData.append('file', profilePicture);
         FileService.uploadProfilePicture(formData, user.id)
             .then(response => {
                 setModalMessage('Profile picture uploaded successfully');
                 setShowModal(true);
-                setTimeout(() => {
-                    setShowModal(false);
-                    updateUserDetails({ ...user, profilePicture: URL.createObjectURL(profilePicture) });
-                }, 2000);
+                updateUserDetails({ ...user, profilePicture: URL.createObjectURL(profilePicture) });
+                setTimeout(() => setShowModal(false), 2000);
             })
             .catch(error => {
                 setModalMessage('Failed to upload profile picture');
@@ -60,11 +72,20 @@ const EditProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await userService.updateUser(user.id, formData);
-            navigate('/profile');
+            const updatedData = {
+                ...formData,
+                roles: user.roles,
+                id: user.id
+            };
+            console.log('Updating user ID:', user.id);
+            if (!user.id) {
+                console.error('User ID is undefined');
+                return;
+            }
+            await updateUserDetails(updatedData);
             setModalMessage('Profile updated successfully!');
             setShowModal(true);
-            setTimeout(() => setShowModal(false), 2000);
+            setModalConfirmed(true);
         } catch (error) {
             console.error("Failed to update profile:", error);
             setModalMessage('Failed to update profile. Please try again.');
@@ -72,6 +93,16 @@ const EditProfile = () => {
             setTimeout(() => setShowModal(false), 2000);
         }
     };
+
+    useEffect(() => {
+        if (modalConfirmed) {
+            const timer = setTimeout(() => {
+                setShowModal(false);
+                navigate('/profile');
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [modalConfirmed, navigate]);
 
     return (
         <div className="edit-profile-container">
@@ -121,17 +152,17 @@ const EditProfile = () => {
                     </select>
                 </div>
                 <div>
-                <ProfilePictureUpload 
-                    userId={user.id} 
-                    onProfilePictureUploaded={(data) => {
-                        updateUserDetails({ ...user, profilePicture: data.url });
-                    }} 
-                />
+                    <ProfilePictureUpload
+                        userId={user.id}
+                        onProfilePictureUploaded={(data) => {
+                            updateUserDetails({ ...user, profilePicture: data.url });
+                        }}
+                    />
                 </div>
                 <button type="submit" className='edit-profile-button'>Update Profile</button>
                 {showModal && <Modal isOpen={showModal} title="Notification">
-                {modalMessage}
-            </Modal>}
+                    {modalMessage}
+                </Modal>}
             </form>
         </div>
     );

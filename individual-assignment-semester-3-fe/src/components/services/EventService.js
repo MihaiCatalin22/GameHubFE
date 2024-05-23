@@ -10,8 +10,8 @@ const getAllEvents = () => {
     return axios.get(`${API_URL}`);
 };
 
-const getEventById = (id, eventData) => {
-    return axios.get(`${API_URL}/${id}`, eventData);
+const getEventById = (id) => {
+    return axios.get(`${API_URL}/${id}`);
 };
 
 const updateEvent = (id, eventData) => {
