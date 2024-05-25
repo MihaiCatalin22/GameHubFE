@@ -21,6 +21,7 @@ const UserProfile = () => {
   const handleViewReviews = () => {
     navigate(`/user/${user.id}/reviews`);
   };
+
   const handleViewPurchases = () => {
     navigate(`/user/${user.id}/purchases`);
   };
@@ -28,6 +29,15 @@ const UserProfile = () => {
   const handleViewLibrary = () => {
     navigate(`/user/${user.id}/library`);
   };
+
+  const handleViewPendingRequests = () => {
+    navigate(`/pending-requests`);
+  };
+
+  const handleViewFriendsList = () => {
+    navigate(`/friends`);
+  };
+
   return (
     <div className="profile-content">
       <h2 className="profile-header">Your Profile</h2>
@@ -40,6 +50,8 @@ const UserProfile = () => {
       <button onClick={handleViewReviews} className="button">Your Reviews</button>
       <button onClick={handleViewPurchases} className="button">Your Purchases</button>
       <button onClick={handleViewLibrary} className="button">Game Library</button>
+      <button onClick={handleViewPendingRequests} className="button">Pending Requests</button>
+      <button onClick={handleViewFriendsList} className="button">Friends List</button>
     </div>
   );
 };

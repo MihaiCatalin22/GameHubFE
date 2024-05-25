@@ -55,13 +55,38 @@ const API_URL = 'http://localhost:8080/users';
       throw error;
     }
   };
-const userService = {
+  const sendFriendRequest = (userId, friendId) => {
+    return api.post('/friend-requests/send', null, { params: { userId, friendId } });
+  };
+  
+  const respondToFriendRequest = (relationshipId, userId, status) => {
+    return api.post('/friend-requests/respond', null, { params: { relationshipId, userId, status } });
+  };
+  
+  const getPendingRequests = (userId) => {
+    return api.get(`/friend-requests/pending/${userId}`);
+  };
+  
+  const getFriends = (userId) => {
+    return api.get(`/friends/${userId}`);
+  };
+  
+  const removeFriend = (userId, friendId) => {
+    return api.delete('/friends/remove', { params: { userId, friendId } });
+  };
+  
+  const userService = {
     createUser,
     getUserById,
     getAllUsers,
     updateUser,
     deleteUser,
-    login
-}
+    login,
+    sendFriendRequest,
+    respondToFriendRequest,
+    getPendingRequests,
+    getFriends,
+    removeFriend,
+  };
 
 export default userService;

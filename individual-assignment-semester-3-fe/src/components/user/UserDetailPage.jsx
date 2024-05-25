@@ -2,35 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import userService from '../services/UserService';
 import { useAuth } from '../../contexts/authContext';
-import forumService from '../services/ForumService';
-import reviewService from '../services/ReviewService';
-
+import AddFriendButton from './friends/FriendRequest';
 
 const UserDetailPage = () => {
   const { userId } = useParams();
   const { user, hasRole } = useAuth();
   const [userDetails, setUserDetails] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [isFriend, setIsFriend] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
   const navigate = useNavigate();
 
+  const checkFriendStatus = async () => {
+    try {
+      const friendsResponse = await userService.getFriends(user.id);
+      const friends = friendsResponse.data;
+      const isAlreadyFriend = friends.some(friend =>
+        (friend.user.id === parseInt(userId) && friend.status === 'ACCEPTED') ||
+        (friend.friend.id === parseInt(userId) && friend.status === 'ACCEPTED')
+      );
+      setIsFriend(isAlreadyFriend);
+
+      const pendingRequestsResponse = await userService.getPendingRequests(user.id);
+      const pendingRequests = pendingRequestsResponse.data;
+      const requestAlreadySent = pendingRequests.some(request => request.user.id === parseInt(userId));
+      setRequestSent(requestAlreadySent);
+    } catch (error) {
+      console.error("Failed to check friend status or pending requests:", error);
+    }
+  };
+
   useEffect(() => {
-    userService.getUserById(userId)
-      .then(response => setUserDetails(response.data))
-      .catch(error => console.error("Failed to fetch user details:", error));
+    const fetchUserDetails = async () => {
+      try {
+        const response = await userService.getUserById(userId);
+        setUserDetails(response.data);
+      } catch (error) {
+        console.error("Failed to fetch user details:", error);
+      }
+    };
 
-    forumService.getPostsByUserId(userId)
-      .then(response => setPosts(response.data))
-      .catch(error => console.error("Failed to fetch posts:", error));
-
-    reviewService.getReviewsByUserId(userId)
-      .then(response => setReviews(response.data))
-      .catch(error => console.error("Failed to fetch reviews:", error));
-  }, [userId]);
+    fetchUserDetails();
+    checkFriendStatus();
+  }, [userId, user.id]);
 
   if (!userDetails) {
     return <div>Loading user details...</div>;
   }
+
   const profilePictureUrl = userDetails.profilePicture
     ? `http://localhost:8080/images/${userDetails.profilePicture}`
     : 'http://localhost:8080/images/default_image.jpg';
@@ -45,6 +63,8 @@ const UserDetailPage = () => {
       <button onClick={() => navigate(`/user/${userId}/posts`)} className="button">View user's posts</button>
       <button onClick={() => navigate(`/user/${userId}/reviews`)} className="button">View user's reviews</button>
       <button onClick={() => navigate(`/user/${userId}/library`)} className="button">View user's games</button>
+      {user?.id !== parseInt(userId) && !isFriend && <AddFriendButton targetUserId={parseInt(userId)} />}
+      {user?.id !== parseInt(userId) && isFriend && <p>You are already friends</p>}
     </div>
   );
 };

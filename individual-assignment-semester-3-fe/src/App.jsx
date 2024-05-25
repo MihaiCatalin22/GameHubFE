@@ -28,6 +28,8 @@ import AboutPage from './components/About';
 import PurchasesPage from './components/purchases/PurchasesPage';
 import LibraryPage from './components/user/LibraryPage';
 import Recommendations from './components/game/Recommendations';
+import PendingRequestsPage from './components/user/friends/PendingRequestsPage';
+import FriendsListPage from './components/user/friends/FriendsListPage';
 
 const App = () => {
   return (
@@ -62,6 +64,9 @@ const App = () => {
               <Route path="/logout" element={<LogoutPage/>} />
               <Route path="/recommendations/:userId" element={<Recommendations />} />
               <Route path="/" element={<AboutPage/>} />
+              <Route path="/friends" element={<FriendsListPage />} />
+              <Route path="/pending-requests" element={<PendingRequestsPage/>} />
+              <Route path="/friends" element={<FriendsListPage/>} />
             </Routes>
             <Footer />
           </div>
