@@ -71,8 +71,8 @@ const API_URL = 'http://localhost:8080/users';
     return api.get(`/friends/${userId}`);
   };
   
-  const removeFriend = (userId, friendId) => {
-    return api.delete('/friends/remove', { params: { userId, friendId } });
+  const removeFriend = (relationshipId) => {
+    return api.delete(`/friends/remove/${relationshipId}`);
   };
   
   const userService = {
