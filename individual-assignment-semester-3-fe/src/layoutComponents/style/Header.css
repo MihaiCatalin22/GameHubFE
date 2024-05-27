@@ -35,3 +35,21 @@
     color: #ff00ff;
     font-size: 1.5em; 
   }
+  .notification-bell {
+    position: relative;
+}
+
+.notification-bell button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.bell-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.bell-icon:hover {
+    filter: brightness(1.5);
+}

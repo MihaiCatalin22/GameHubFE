@@ -4,12 +4,15 @@ import EventForm from "./EventForm";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from '../../contexts/authContext'
 import ReactPaginate from "react-paginate";
+import Modal from "../Modal";
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
   const [currentEvent, setCurrentEvent] = useState(null);
   const [addingEvent, setAddingEvent] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuth();
   const eventsPerPage = 5;
@@ -56,6 +59,25 @@ const EventList = () => {
     return event.participants.some(participant => participant.id === user.id);
   };
 
+  const openModal = (event) => {
+    setEventToDelete(event);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setEventToDelete(null);
+  };
+
+  const confirmDelete = () => {
+    if (eventToDelete) {
+      EventService.deleteEvent(eventToDelete.id).then(() => {
+        setEvents(events.filter(e => e.id !== eventToDelete.id));
+        closeModal();
+      });
+    }
+  };
+
   const filteredEvents = events.filter(event => 
     event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     event.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,13 +94,7 @@ const EventList = () => {
         {user && (user.role.includes('ADMINISTRATOR') || user.role.includes('COMMUNITY_MANAGER')) && (
           <>
             <button className='button' onClick={() => handleEditEvent(event)}>Edit</button>
-            <button className='button' onClick={() => {
-              if (window.confirm('Are you sure you want to delete this event?')) {
-                EventService.deleteEvent(event.id).then(() => {
-                  setEvents(events.filter(e => e.id !== event.id));
-                });
-              }
-            }}>Delete</button>
+            <button className='button' onClick={() => openModal(event)}>Delete</button>
           </>
         )}
       </div>
@@ -124,6 +140,16 @@ const EventList = () => {
           />
         </>
       )}
+      <Modal
+        isOpen={modalIsOpen}
+        title="Confirm Deletion"
+        onClose={closeModal}
+        onConfirm={confirmDelete}
+        showConfirmButton={true}
+        showCancelButton={true}
+      >
+        <p>Are you sure you want to delete this event?</p>
+      </Modal>
     </div>
   );
 };

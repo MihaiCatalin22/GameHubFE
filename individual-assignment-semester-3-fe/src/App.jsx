@@ -30,11 +30,14 @@ import LibraryPage from './components/user/LibraryPage';
 import Recommendations from './components/game/Recommendations';
 import PendingRequestsPage from './components/user/friends/PendingRequestsPage';
 import FriendsListPage from './components/user/friends/FriendsListPage';
+import ChatComponent from './components/ChatComponent';
+import WebSocketInitializer from './components/WebSocketInitializer';
 
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
+      <WebSocketInitializer />
         <main className="flex-grow">
           <div className="flex justify-center items-center w-full h-full min-h-screen">
           <Header />
@@ -67,6 +70,7 @@ const App = () => {
               <Route path="/friends" element={<FriendsListPage />} />
               <Route path="/pending-requests" element={<PendingRequestsPage/>} />
               <Route path="/friends" element={<FriendsListPage/>} />
+              <Route path="/chat/:friendId" element={<ChatComponent />} />
             </Routes>
             <Footer />
           </div>

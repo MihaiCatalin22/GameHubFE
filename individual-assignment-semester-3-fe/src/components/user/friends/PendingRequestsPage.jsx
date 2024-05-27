@@ -13,7 +13,7 @@ const PendingRequestsPage = () => {
     if (user?.id) {
       userService.getPendingRequests(user.id)
         .then(response => {
-          console.log("Response data:", response.data); // Log the response data
+          console.log("Response data:", response.data);
           if (Array.isArray(response.data)) {
             setRequests(response.data);
           } else {

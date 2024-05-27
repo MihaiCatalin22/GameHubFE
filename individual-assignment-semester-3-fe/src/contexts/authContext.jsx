@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import userService from '../components/services/UserService';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import userService from '../components/services/UserService';
 
 const AuthContext = createContext(undefined);
 
@@ -12,23 +12,25 @@ const updateAxiosToken = (token) => {
     delete axios.defaults.headers.common['Authorization'];
   }
 };
+
 const TokenManager = {
-  getAccessToken: () => sessionStorage.getItem("accessToken"),
+  getAccessToken: () => sessionStorage.getItem('accessToken'),
   setAccessToken: (token) => {
-      sessionStorage.setItem("accessToken", token);
-      const claims = jwtDecode(token);
-      sessionStorage.setItem("claims", JSON.stringify(claims));
-      return claims;
+    sessionStorage.setItem('accessToken', token);
+    const claims = jwtDecode(token);
+    sessionStorage.setItem('claims', JSON.stringify(claims));
+    return claims;
   },
   clear: () => {
-      sessionStorage.removeItem("accessToken");
-      sessionStorage.removeItem("claims");
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('claims');
   }
 };
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const storedToken = TokenManager.getAccessToken();
@@ -70,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       sessionStorage.setItem('user', JSON.stringify(updatedUser));
       updateAxiosToken(updatedUser.token);
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error('Error updating user:', error);
       throw error;
     }
   };
@@ -80,20 +82,35 @@ export const AuthProvider = ({ children }) => {
       rolesRequired = [rolesRequired];
     }
     const userRoles = user?.roles || [];
-    return rolesRequired.some(role => userRoles.includes(role));
+    return rolesRequired.some((role) => userRoles.includes(role));
   };
 
+  const getAuthToken = () => TokenManager.getAccessToken();
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, setUser, loginUser, logoutUser, updateUserDetails, hasRole }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        setUser,
+        loginUser,
+        logoutUser,
+        updateUserDetails,
+        hasRole,
+        getAuthToken,
+        notifications,
+        setNotifications
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-const context = useContext(AuthContext);
-if (!context) {
-  throw new Error('useAuth must be used within an AuthProvider');
-}
-return context;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
