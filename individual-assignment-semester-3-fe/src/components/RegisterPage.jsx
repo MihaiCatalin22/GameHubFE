@@ -36,9 +36,9 @@ const RegisterPage = () => {
   return (
     <div className="auth-form-container">
       <h2 className="auth-form-title">Register</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username" className="auth-form-label">Username</label>
           <input
             type="text"
             id="username"
@@ -46,10 +46,11 @@ const RegisterPage = () => {
             value={userDetails.username}
             onChange={handleChange}
             required
+            className="auth-form-input"
           />
         </div>
         <div>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="auth-form-label">Email</label>
           <input
             type="email"
             id="email"
@@ -57,10 +58,11 @@ const RegisterPage = () => {
             value={userDetails.email}
             onChange={handleChange}
             required
+            className="auth-form-input"
           />
         </div>
         <div>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="auth-form-label">Password</label>
           <input
             type="password"
             id="password"
@@ -68,11 +70,12 @@ const RegisterPage = () => {
             value={userDetails.password}
             onChange={handleChange}
             required
+            className="auth-form-input"
           />
         </div>
         <button type="submit" className="auth-form-button">Register</button>
         <Modal isOpen={showModal} title="Registration Status">
-        Registered successfully!
+          Registered successfully!
         </Modal>
       </form>
     </div>

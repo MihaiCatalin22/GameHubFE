@@ -38,19 +38,19 @@ const LoginPage = () => {
       <h2 className="auth-form-title">Login</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label htmlFor="username" autoCorrect='off' className="block mb-2">Username</label>
+          <label htmlFor="username" className="auth-form-label">Username</label>
           <input 
-            type="username" 
+            type="text" 
             id="username" 
             name="username" 
             value={username} 
             onChange={(e) => setUsername(e.target.value)} 
             required 
-            className="w-full p-2 border border-gray-300 rounded"
+            className="auth-form-input"
           />
         </div>
         <div>
-          <label htmlFor="password" className="block mb-2">Password</label>
+          <label htmlFor="password" className="auth-form-label">Password</label>
           <input 
             type="password" 
             id="password" 
@@ -58,12 +58,11 @@ const LoginPage = () => {
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             required 
-            className="w-full p-2 border border-gray-300 rounded"
+            className="auth-form-input"
           />
         </div>
         <button type="submit" className="auth-form-button">Login</button>
         {error && <div className="text-red-500 text-center mt-4">{error}</div>}
-        
         <p className="text-center">
           New User? 
           <Link to="/register" className="auth-form-link">
@@ -78,6 +77,5 @@ const LoginPage = () => {
       </form>
     </div>
   );
-};
-
+}
 export default LoginPage;

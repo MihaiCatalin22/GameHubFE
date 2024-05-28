@@ -31,7 +31,9 @@ const GamesList = ({ onSelect }) => {
     const handleAddGame = () => {
       navigate("/add-game");
     };
-
+    const handleViewSalesStats = () => {
+      navigate("/admin/sales-stats");
+    };
     const handleSearchChange = (event) => {
       setSearchTerm(event.target.value);
     };
@@ -82,9 +84,14 @@ const GamesList = ({ onSelect }) => {
         activeClassName={"pagination__link--active"}
       />
       {user && user.role.includes('ADMINISTRATOR') && (
-        <button onClick={handleAddGame} className="button add-game-button">
-          Add New Game
-        </button>
+        <>
+          <button onClick={handleAddGame} className="button add-game-button">
+            Add New Game
+          </button>
+          <button onClick={handleViewSalesStats} className="button add-game-button">
+            View Sales Statistics
+          </button>
+        </>
       )}
       
     </div>

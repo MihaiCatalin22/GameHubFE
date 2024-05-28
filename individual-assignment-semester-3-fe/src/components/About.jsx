@@ -1,10 +1,10 @@
 import React from "react";
-import logo from '../../dist/LOGO.png';
+import LOGO from '../icons/LOGO.png';
 
 const AboutPage = () => {
     return (
         <div className="about-container">
-            <img src={logo} alt="GameHub Logo should be here" className="about-logo" />
+            <img src={LOGO} alt="GameHub Logo should be here" className="about-logo" />
             <h1 className="about-title">Welcome to GameHub.</h1>
             <p className="about-text">
                 GameHub is the ultimate social network for gamers. It connects players from around the world,

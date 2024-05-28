@@ -103,7 +103,7 @@ const EventList = () => {
   const pageCount = Math.ceil(filteredEvents.length / eventsPerPage);
 
   return (
-    <div className="events-list">
+    <div className="events-list-page">
       <h2>Events</h2>
       <input
         type="text"

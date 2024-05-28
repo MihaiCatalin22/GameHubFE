@@ -45,15 +45,16 @@ const UserProfile = () => {
       <p className="profile-detail">Username: {user.username}</p>
       <p className="profile-detail">Email: {user.email}</p>
       <p className="profile-detail">Bio: {user.description}</p>
-      <button onClick={handleEditProfile} className="button">Edit Profile</button>
-      <button onClick={handleViewPosts} className="button">Your Posts</button>
-      <button onClick={handleViewReviews} className="button">Your Reviews</button>
-      <button onClick={handleViewPurchases} className="button">Your Purchases</button>
-      <button onClick={handleViewLibrary} className="button">Game Library</button>
-      <button onClick={handleViewPendingRequests} className="button">Pending Requests</button>
-      <button onClick={handleViewFriendsList} className="button">Friends List</button>
+      <div className="button-group">
+        <button onClick={handleEditProfile} className="button">Edit Profile</button>
+        <button onClick={handleViewPosts} className="button">Your Posts</button>
+        <button onClick={handleViewReviews} className="button">Your Reviews</button>
+        <button onClick={handleViewPurchases} className="button">Your Purchases</button>
+        <button onClick={handleViewLibrary} className="button">Game Library</button>
+        <button onClick={handleViewPendingRequests} className="button">Pending Requests</button>
+        <button onClick={handleViewFriendsList} className="button">Friends List</button>
+      </div>
     </div>
   );
-};
-
+}
 export default UserProfile;

@@ -53,20 +53,22 @@ const UserDetailPage = () => {
     ? `http://localhost:8080/images/${userDetails.profilePicture}`
     : 'http://localhost:8080/images/default_image.jpg';
 
-  return (
-    <div className="profile-content">
-      <h2 className="profile-header">User Profile</h2>
-      <img src={profilePictureUrl} alt="Profile" className="profile-picture"/>
-      <p className="profile-detail">Username: {userDetails.username}</p>
-      {hasRole('ADMINISTRATOR') && <p className="profile-detail">Email: {userDetails.email}</p>}
-      <p className="profile-detail">Bio: {userDetails.description}</p>
-      <button onClick={() => navigate(`/user/${userId}/posts`)} className="button">View user's posts</button>
-      <button onClick={() => navigate(`/user/${userId}/reviews`)} className="button">View user's reviews</button>
-      <button onClick={() => navigate(`/user/${userId}/library`)} className="button">View user's games</button>
-      {user?.id !== parseInt(userId) && !isFriend && <AddFriendButton targetUserId={parseInt(userId)} />}
-      {user?.id !== parseInt(userId) && isFriend && <p>You are already friends</p>}
-    </div>
-  );
+    return (
+      <div className="profile-content">
+        <h2 className="profile-header">User Profile</h2>
+        <img src={profilePictureUrl} alt="Profile" className="profile-picture"/>
+        <p className="profile-detail">Username: {userDetails.username}</p>
+        {hasRole('ADMINISTRATOR') && <p className="profile-detail">Email: {userDetails.email}</p>}
+        <p className="profile-detail">Bio: {userDetails.description}</p>
+        <div className="button-group">
+          <button onClick={() => navigate(`/user/${userId}/posts`)} className="button">View user's posts</button>
+          <button onClick={() => navigate(`/user/${userId}/reviews`)} className="button">View user's reviews</button>
+          <button onClick={() => navigate(`/user/${userId}/library`)} className="button">View user's games</button>
+          {user?.id !== parseInt(userId) && !isFriend && <AddFriendButton targetUserId={parseInt(userId)} />}
+        </div>
+        {user?.id !== parseInt(userId) && isFriend && <p>You are already friends</p>}
+      </div>
+    );
 };
 
 export default UserDetailPage;

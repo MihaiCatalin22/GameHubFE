@@ -32,6 +32,7 @@ import PendingRequestsPage from './components/user/friends/PendingRequestsPage';
 import FriendsListPage from './components/user/friends/FriendsListPage';
 import ChatComponent from './components/ChatComponent';
 import WebSocketInitializer from './components/WebSocketInitializer';
+import SalesStatisticsPage from './components/game/SalesStatisticsPage';
 
 const App = () => {
   return (
@@ -71,6 +72,7 @@ const App = () => {
               <Route path="/pending-requests" element={<PendingRequestsPage/>} />
               <Route path="/friends" element={<FriendsListPage/>} />
               <Route path="/chat/:friendId" element={<ChatComponent />} />
+              <Route path="/admin/sales-stats" element={<SalesStatisticsPage />} />
             </Routes>
             <Footer />
           </div>
