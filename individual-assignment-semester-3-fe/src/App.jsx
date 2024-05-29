@@ -8,7 +8,7 @@ import RegisterPage from './components/RegisterPage';
 import ForumPage from './components/forum/ForumPage';
 import ForumPostDetails from './components/forum/ForumPostDetails';
 import GamesPage from './components/game/GamesPage';
-import UserList from './components/user/UserList.Jsx';
+import UserList from './components/user/UserList';
 import UserDetailPage from './components/user/UserDetailPage';
 import GameForm from './components/game/GameForm';
 import GameDetailsPage from './components/game/GameDetails';
