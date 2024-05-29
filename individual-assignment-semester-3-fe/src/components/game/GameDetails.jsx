@@ -20,6 +20,7 @@ const GameDetailsPage = () => {
   const [ownsGame, setOwnsGame] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,9 +53,18 @@ const GameDetailsPage = () => {
   };
 
   const handleDeleteGame = async () => {
-    if (window.confirm('Are you sure you want to delete this game?')) {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteGame = async () => {
+    try {
       await gameService.deleteGame(gameId);
       navigate('/games');
+    } catch (error) {
+      console.error('Error deleting game:', error);
+      setError('Failed to delete game.');
+    } finally {
+      setShowDeleteModal(false);
     }
   };
 
@@ -131,6 +141,18 @@ const GameDetailsPage = () => {
           {showModal && (
             <Modal isOpen={showModal} title="Notification" onClose={() => setShowModal(false)}>
               <p>{modalMessage}</p>
+            </Modal>
+          )}
+          {showDeleteModal && (
+            <Modal 
+              isOpen={showDeleteModal} 
+              title="Confirm Delete" 
+              onClose={() => setShowDeleteModal(false)}
+              onConfirm={confirmDeleteGame}
+              showConfirmButton={true}
+              showCancelButton={true}
+            >
+              <p>Are you sure you want to delete this game?</p>
             </Modal>
           )}
         </>

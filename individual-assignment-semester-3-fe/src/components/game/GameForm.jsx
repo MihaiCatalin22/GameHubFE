@@ -3,16 +3,10 @@ import gameService from '../services/GameService';
 import GenreTagsInput from './GenreTagsInput';
 import { useAuth } from '../../contexts/authContext';
 import Modal from '../Modal';
+import { useForm } from 'react-hook-form';
 
 const GameForm = ({ onSave, initialData }) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    genres: [],
-    releaseDate: '',
-    description: '',
-    developer: '',
-    price: '',
-  });
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const { user } = useAuth();
   const [selectedGenres, setSelectedGenres] = useState(initialData?.genres || []);
   const [showModal, setShowModal] = useState(false);
@@ -20,61 +14,55 @@ const GameForm = ({ onSave, initialData }) => {
 
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        title: initialData.title || '',
-        releaseDate: initialData.releaseDate || '',
-        description: initialData.description || '',
-        developer: initialData.developer || '',
-        price: initialData.price || '',
-      });
+      setValue('title', initialData.title || '');
+      setValue('releaseDate', initialData.releaseDate || '');
+      setValue('description', initialData.description || '');
+      setValue('developer', initialData.developer || '');
+      setValue('price', initialData.price || '');
       setSelectedGenres(initialData.genres || []);
     }
-  }, [initialData]);
+  }, [initialData, setValue]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const onSubmit = async (data) => {
+    if (!user || !user.role.includes('ADMINISTRATOR')) {
+      setModalMessage("You do not have permission to modify game details.");
+      setShowModal(true);
+      setTimeout(() => setShowModal(false), 2000);
+      return;
+    }
+    
+    const gameData = { ...data, genres: selectedGenres };
+    try {
+      const response = initialData?.id ? await gameService.updateGame(initialData.id, gameData) : await gameService.createGame(gameData);
+      onSave(response.data);
+      setModalMessage('Game details saved successfully!');
+      setShowModal(true);
+      setTimeout(() => setShowModal(false), 2000);
+    } catch (error) {
+      console.error('Error saving game:', error);
+      setModalMessage('Failed to save game details. Please try again.');
+      setShowModal(true);
+      setTimeout(() => setShowModal(false), 2000);
+    }
   };
-
-  const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!user || !user.role.includes('ADMINISTRATOR')) {
-            setModalMessage("You do not have permission to modify game details.");
-            setShowModal(true);
-            setTimeout(() => setShowModal(false), 2000);
-            return;
-        }
-        const gameData = { ...formData, genres: selectedGenres };
-        try {
-            const response = initialData?.id ? await gameService.updateGame(initialData.id, gameData) : await gameService.createGame(gameData);
-            onSave(response.data);
-            setModalMessage('Game details saved successfully!');
-            setShowModal(true);
-            setTimeout(() => setShowModal(false), 2000);
-        } catch (error) {
-            console.error('Error saving game:', error);
-            setModalMessage('Failed to save game details. Please try again.');
-            setShowModal(true);
-            setTimeout(() => setShowModal(false), 2000);
-        }
-    };
 
   return (
     <div className="game-form">
       <div className="game-form-container">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label htmlFor="title" className="block mb-2">Title</label>
             <input
               type="text"
               id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
+              {...register('title', {
+                required: 'Title is required',
+                maxLength: { value: 100, message: 'Title cannot exceed 100 characters' }
+              })}
               placeholder="Game Title"
               className="w-full px-3 py-2 border rounded"
-              required
             />
+            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
           </div>
           <label htmlFor='genres' className="block mb-2">Genres</label>
           <GenreTagsInput
@@ -86,51 +74,49 @@ const GameForm = ({ onSave, initialData }) => {
             <input
               type="date"
               id="releaseDate"
-              name="releaseDate"
-              value={formData.releaseDate}
-              onChange={handleChange}
+              {...register('releaseDate', { required: 'Release date is required' })}
               className="w-full px-3 py-2 border rounded"
-              required
             />
+            {errors.releaseDate && <p className="text-red-500">{errors.releaseDate.message}</p>}
           </div>
           <div>
             <label htmlFor="description" className="block mb-2">Description</label>
             <textarea
               id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
+              {...register('description', { 
+                required: 'Description is required',
+                maxLength: { value: 1500, message: 'Description cannot exceed 1500 characters' }
+              })}
               placeholder="Game Description"
               className="w-full px-3 py-2 border rounded"
-              required
             />
+            {errors.description && <p className="text-red-500">{errors.description.message}</p>}
           </div>
           <div>
             <label htmlFor="developer" className="block mb-2">Developer</label>
             <input
               type="text"
               id="developer"
-              name="developer"
-              value={formData.developer}
-              onChange={handleChange}
+              {...register('developer', { required: 'Developer is required' })}
               placeholder="Developer Name"
               className="w-full px-3 py-2 border rounded"
-              required
             />
+            {errors.developer && <p className="text-red-500">{errors.developer.message}</p>}
           </div>
           <div>
             <label htmlFor="price" className="block mb-2">Price (€)</label>
             <input
               type="number"
               id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
+              {...register('price', { 
+                required: 'Price is required',
+                min: { value: 0.01, message: 'Price must be a positive number' }
+              })}
               placeholder="Game Price"
               step="0.01"
               className="w-full px-3 py-2 border rounded"
-              required
             />
+            {errors.price && <p className="text-red-500">{errors.price.message}</p>}
           </div>
           <button type="submit" className="button">
             Save Game

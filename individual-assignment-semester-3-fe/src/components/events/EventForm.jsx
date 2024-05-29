@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import EventService from '../services/EventService';
 import Modal from '../Modal';
+import { useForm } from 'react-hook-form';
 
 const EventForm = ({ onEventSaved, existingEvent }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const isUpdate = existingEvent && existingEvent.id;
 
   useEffect(() => {
     if (existingEvent) {
-      setName(existingEvent.name);
-      setDescription(existingEvent.description);
-      setStartDate(existingEvent.startDate);
-      setEndDate(existingEvent.endDate);
+      setValue('name', existingEvent.name);
+      setValue('description', existingEvent.description);
+      setValue('startDate', existingEvent.startDate);
+      setValue('endDate', existingEvent.endDate);
     }
-  }, [existingEvent]);
+  }, [existingEvent, setValue]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const eventData = { name, description, startDate, endDate };
+  const onSubmit = async (data) => {
+    const eventData = { ...data };
     
     try {
       let response;
@@ -37,10 +34,12 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
       setTimeout(() => {
         setShowModal(false);
         onEventSaved(response.data);
-        setName('');
-        setDescription('');
-        setStartDate('');
-        setEndDate('');
+        if (!isUpdate) {
+          setValue('name', '');
+          setValue('description', '');
+          setValue('startDate', '');
+          setValue('endDate', '');
+        }
       }, 2000);
     } catch (error) {
       console.error('Failed to save event:', error);
@@ -50,47 +49,54 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
     }
   };
 
+  const validateFutureDate = (date) => {
+    const now = new Date();
+    return new Date(date) > now || 'Date must be in the future';
+  };
+
   return (
     <div className="event-form-container">
-      <form onSubmit={handleSubmit} className="event-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="event-form">
         <div>
           <label className="event-form-label">Name:</label>
           <input
             type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
+            {...register('name', { required: 'Event name is required' })}
             className="event-form-input"
-            required
           />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
         <div>
           <label className="event-form-label">Description:</label>
           <textarea
-            value={description}
-            onChange={e => setDescription(e.target.value)}
+            {...register('description', { required: 'Event description is required' })}
             className="event-form-textarea"
-            required
           />
+          {errors.description && <p className="text-red-500">{errors.description.message}</p>}
         </div>
         <div>
           <label className="event-form-label">Start Date:</label>
           <input
             type="datetime-local"
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
+            {...register('startDate', {
+              required: 'Start date is required',
+              validate: validateFutureDate
+            })}
             className="event-form-input"
-            required
           />
+          {errors.startDate && <p className="text-red-500">{errors.startDate.message}</p>}
         </div>
         <div>
           <label className="event-form-label">End Date:</label>
           <input
             type="datetime-local"
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
+            {...register('endDate', {
+              required: 'End date is required',
+              validate: validateFutureDate
+            })}
             className="event-form-input"
-            required
           />
+          {errors.endDate && <p className="text-red-500">{errors.endDate.message}</p>}
         </div>
         <button type="submit" className="event-form-button">{isUpdate ? 'Update Event' : 'Create Event'}</button>
         {showModal && <Modal isOpen={showModal} title="Event Submission Status">

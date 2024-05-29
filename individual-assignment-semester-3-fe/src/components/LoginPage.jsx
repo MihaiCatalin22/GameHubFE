@@ -2,20 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 import userService from './services/UserService';
+import { useForm } from 'react-hook-form';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginUser } = useAuth();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError(null);
+  const handleLogin = async (data) => {
+    clearErrors();
     try {
-      
-      const response = await userService.login({ username, password });
+      const response = await userService.login(data);
       if (response.jwt) {
         loginUser({
           ...response,
@@ -24,45 +21,41 @@ const LoginPage = () => {
         });
         navigate('/');
       } else {
-        setError("Authentication token not received.");
+        setError("username", { type: "manual", message: "Authentication token not received." });
       }
     } catch (error) {
       console.error('Error during login:', error);
       const errMsg = error.response && error.response.data ? error.response.data.message : "Login failed due to an unexpected issue.";
-      setError(errMsg);
+      setError("username", { type: "manual", message: errMsg });
     }
   };
 
   return (
     <div className="auth-form-container">
       <h2 className="auth-form-title">Login</h2>
-      <form onSubmit={handleLogin} className="space-y-4">
+      <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
         <div>
           <label htmlFor="username" className="auth-form-label">Username</label>
           <input 
             type="text" 
             id="username" 
-            name="username" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
+            {...register('username', { required: 'Username is required' })} 
             className="auth-form-input"
           />
+          {errors.username && <p className="text-red-500">{errors.username.message}</p>}
         </div>
         <div>
           <label htmlFor="password" className="auth-form-label">Password</label>
           <input 
             type="password" 
             id="password" 
-            name="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
+            {...register('password', { required: 'Password is required' })} 
             className="auth-form-input"
           />
+          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
         </div>
         <button type="submit" className="auth-form-button">Login</button>
-        {error && <div className="text-red-500 text-center mt-4">{error}</div>}
+        {errors.username && <div className="text-red-500 text-center mt-4">{errors.username.message}</div>}
         <p className="text-center">
           New User? 
           <Link to="/register" className="auth-form-link">

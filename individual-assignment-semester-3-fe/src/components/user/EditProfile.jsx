@@ -4,26 +4,30 @@ import { useAuth } from '../../contexts/authContext';
 import FileService from '../services/FileService';
 import Modal from '../Modal';
 import ProfilePictureUpload from './ProfilePictureUpload';
+import { useForm } from 'react-hook-form';
 
 const EditProfile = () => {
     const { user, updateUserDetails } = useAuth();
-    const [formData, setFormData] = useState({
-        username: user?.username || '',
-        email: user?.email || '',
-        description: user?.description || '',
-        privacy: user?.privacy || 'Public',
-        roles: user?.roles || []
-    });
     const [profilePicture, setProfilePicture] = useState(null);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [modalConfirmed, setModalConfirmed] = useState(false);
 
+    const { register, handleSubmit, formState: { errors }, setError, clearErrors, reset } = useForm({
+        defaultValues: {
+            username: user?.username || '',
+            email: user?.email || '',
+            description: user?.description || '',
+            privacy: user?.privacy || 'Public',
+            roles: user?.roles || []
+        }
+    });
+
     useEffect(() => {
         if (user) {
             console.log('User ID:', user.id);
-            setFormData({
+            reset({
                 username: user.username,
                 email: user.email || '',
                 description: user.description || '',
@@ -31,14 +35,7 @@ const EditProfile = () => {
                 roles: user.roles || []
             });
         }
-    }, [user]);
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
+    }, [user, reset]);
 
     const handleProfilePictureChange = (e) => {
         setProfilePicture(e.target.files[0]);
@@ -69,11 +66,11 @@ const EditProfile = () => {
             });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (data) => {
+        clearErrors();
         try {
             const updatedData = {
-                ...formData,
+                ...data,
                 roles: user.roles,
                 id: user.id
             };
@@ -107,45 +104,47 @@ const EditProfile = () => {
     return (
         <div className="edit-profile-container">
             <h2 className="edit-profile-title">Edit Your Profile</h2>
-            <form onSubmit={handleSubmit} className='edit-profile-form'>
+            <form onSubmit={handleSubmit(onSubmit)} className='edit-profile-form'>
                 <div>
                     <label htmlFor="username" className="edit-profile-label">Username:</label>
                     <input
                         type="text"
                         id="username"
-                        name="username"
+                        {...register('username', {
+                            required: 'Username is required',
+                            minLength: { value: 3, message: 'Username must be at least 3 characters' },
+                            maxLength: { value: 20, message: 'Username cannot exceed 20 characters' }
+                        })}
                         className="edit-profile-input"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
                     />
+                    {errors.username && <p className="text-red-500">{errors.username.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="email" className="edit-profile-label">Email:</label>
                     <input
                         type="email"
                         id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        {...register('email', {
+                            required: 'Email is required',
+                            pattern: { value: /^\S+@\S+$/i, message: 'Entered value does not match email format' }
+                        })}
                         className="edit-profile-input"
-                        required
                     />
+                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="description" className="edit-profile-label">Bio:</label>
                     <textarea
                         id="description"
-                        name="description"
+                        {...register('description', { maxLength: { value: 255, message: 'Description must be less than 255 characters' } })}
                         className="edit-profile-textarea"
-                        value={formData.description}
-                        onChange={handleChange}
                         rows="4"
                     />
+                    {errors.description && <p className="text-red-500">{errors.description.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="privacy" className="edit-profile-label">Privacy Settings:</label>
-                    <select id="privacy" name="privacy" className="edit-profile-select" value={formData.privacy} onChange={handleChange}>
+                    <select id="privacy" {...register('privacy')} className="edit-profile-select">
                         <option value="Public">Public</option>
                         <option value="FriendsOnly">Friends Only</option>
                         <option value="Private">Private</option>
