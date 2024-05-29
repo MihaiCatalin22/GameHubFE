@@ -8,7 +8,7 @@ import RegisterPage from './components/RegisterPage';
 import ForumPage from './components/forum/ForumPage';
 import ForumPostDetails from './components/forum/ForumPostDetails';
 import GamesPage from './components/game/GamesPage';
-import UsersListPage from './components/user/UserList';
+import UserList from './components/user/UserList';
 import UserDetailPage from './components/user/UserDetailPage';
 import GameForm from './components/game/GameForm';
 import GameDetailsPage from './components/game/GameDetails';
@@ -54,7 +54,7 @@ const App = () => {
               <Route path="/user/:userId/library" element={<LibraryPage />} />
               <Route path="/games/:gameId/review" element={<ReviewSubmissionPage />} />
               <Route path="/games/edit/:gameId" element={<EditGamePage />} />
-              <Route path="/users" element={<UsersListPage />} />
+              <Route path="/users" element={<UserList />} />
               <Route path="/users/:userId" element={<UserDetailPage />} />
               <Route path="/user/:userId/posts" element={<UserPosts />} />
               <Route path="/user/:userId/reviews" element={<UserReviews />} />
