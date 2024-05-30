@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
-
+import default_image from '../../icons/default_image.jpg' 
 const UserProfile = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const UserProfile = () => {
   return (
     <div className="profile-content">
       <h2 className="profile-header">Your Profile</h2>
-      <img src={user.profilePicture ? `http://localhost:8080/images/${user.profilePicture}` : 'http://localhost:8080/images/default_image.jpg'} alt="Profile" className="profile-picture"/>
+      <img src={user.profilePicture ? `http://localhost:8080/images/${user.profilePicture}` : default_image} alt="Profile" className="profile-picture"/>
       <p className="profile-detail">Username: {user.username}</p>
       <p className="profile-detail">Email: {user.email}</p>
       <p className="profile-detail">Bio: {user.description}</p>
