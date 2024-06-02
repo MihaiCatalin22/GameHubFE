@@ -74,7 +74,22 @@ const API_URL = 'http://localhost:8080/users';
   const removeFriend = (relationshipId) => {
     return api.delete(`/friends/remove/${relationshipId}`);
   };
+
+  const verifyUsername = async (username) => {
+    try {
+        const response = await api.post('/verify-username', { username });
+        return response.data;
+    } catch (error) {
+        console.error('Error verifying username:', error);
+        throw error;
+    }
+};
+
   
+  const resetPassword = async (username, newPassword) => {
+    const response = await api.post('/reset-password', { username, newPassword });
+    return response.data;
+  };
   const userService = {
     createUser,
     getUserById,
@@ -87,6 +102,8 @@ const API_URL = 'http://localhost:8080/users';
     getPendingRequests,
     getFriends,
     removeFriend,
+    verifyUsername,
+    resetPassword
   };
 
 export default userService;
