@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import userService from '../services/UserService';
 import { useAuth } from '../../contexts/authContext';
 import AddFriendButton from './friends/FriendRequest';
+import default_image from '../../icons/default_image.jpg';
 
 const UserDetailPage = () => {
   const { userId } = useParams();
@@ -51,7 +52,7 @@ const UserDetailPage = () => {
 
   const profilePictureUrl = userDetails.profilePicture
     ? `http://localhost:8080/images/${userDetails.profilePicture}`
-    : 'http://localhost:8080/images/default_image.jpg';
+    : default_image;
 
     return (
       <div className="profile-content">

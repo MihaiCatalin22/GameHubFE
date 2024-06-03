@@ -28,7 +28,6 @@ const ReviewSubmissionPage = () => {
 
         try {
             const response = await reviewService.addReview(gameId, reviewData, userId);
-            console.log("Review submitted successfully:", response.data);
             setModalMessage('Review submitted successfully!');
             setShowModal(true);
             setTimeout(() => {
@@ -49,7 +48,7 @@ const ReviewSubmissionPage = () => {
 
     return (
         <div className="review-submission-page">
-            <h1>Submit Your Review</h1>
+            <h1 className="auth-form-title">Submit Your Review</h1>
             <form className="review-form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="rating-container">
                     {[...Array(5)].map((_, index) => (
@@ -83,9 +82,9 @@ const ReviewSubmissionPage = () => {
                     rows="4"
                 />
                 {errors.content && <p className="text-red-500">{errors.content.message}</p>}
-                <input type="submit" className='button' value="Submit Review" />
+                <button type="submit" className="button">Submit Review</button>
             </form>
-            <button onClick={handleBack} className='button'>Go Back</button>
+            <button onClick={handleBack} className="auth-form-button">Go Back</button>
             {showModal && <Modal isOpen={showModal} title="Review Submission Status">
                 {modalMessage}
             </Modal>}

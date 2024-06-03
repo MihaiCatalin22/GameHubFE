@@ -47,85 +47,86 @@ const GameForm = ({ onSave, initialData }) => {
   };
 
   return (
-    <div className="game-form">
-      <div className="game-form-container">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label htmlFor="title" className="block mb-2">Title</label>
-            <input
-              type="text"
-              id="title"
-              {...register('title', {
-                required: 'Title is required',
-                maxLength: { value: 100, message: 'Title cannot exceed 100 characters' }
-              })}
-              placeholder="Game Title"
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-          </div>
-          <label htmlFor='genres' className="block mb-2">Genres</label>
+    <div className="auth-form-container">
+      <h2 className="auth-form-title">Game Details</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 game-form">
+        <div>
+          <label htmlFor="title" className="auth-form-label">Title</label>
+          <input
+            type="text"
+            id="title"
+            {...register('title', {
+              required: 'Title is required',
+              maxLength: { value: 100, message: 'Title cannot exceed 100 characters' }
+            })}
+            placeholder="Game Title"
+            className="auth-form-input"
+          />
+          {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="genres" className="auth-form-label">Genres</label>
           <GenreTagsInput
             selectedGenres={selectedGenres}
             setSelectedGenres={setSelectedGenres}
-          />          
-          <div>
-            <label htmlFor="releaseDate" className="block mb-2">Release Date</label>
-            <input
-              type="date"
-              id="releaseDate"
-              {...register('releaseDate', { required: 'Release date is required' })}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.releaseDate && <p className="text-red-500">{errors.releaseDate.message}</p>}
-          </div>
-          <div>
-            <label htmlFor="description" className="block mb-2">Description</label>
-            <textarea
-              id="description"
-              {...register('description', { 
-                required: 'Description is required',
-                maxLength: { value: 1500, message: 'Description cannot exceed 1500 characters' }
-              })}
-              placeholder="Game Description"
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.description && <p className="text-red-500">{errors.description.message}</p>}
-          </div>
-          <div>
-            <label htmlFor="developer" className="block mb-2">Developer</label>
-            <input
-              type="text"
-              id="developer"
-              {...register('developer', { required: 'Developer is required' })}
-              placeholder="Developer Name"
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.developer && <p className="text-red-500">{errors.developer.message}</p>}
-          </div>
-          <div>
-            <label htmlFor="price" className="block mb-2">Price (€)</label>
-            <input
-              type="number"
-              id="price"
-              {...register('price', { 
-                required: 'Price is required',
-                min: { value: 0.01, message: 'Price must be a positive number' }
-              })}
-              placeholder="Game Price"
-              step="0.01"
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.price && <p className="text-red-500">{errors.price.message}</p>}
-          </div>
-          <button type="submit" className="button">
-            Save Game
-          </button>
-          {showModal && <Modal isOpen={showModal} title="Game Update Status">
-                {modalMessage}
-            </Modal>}
-        </form>
-      </div>
+          />
+        </div>
+        <div>
+          <label htmlFor="releaseDate" className="auth-form-label">Release Date</label>
+          <input
+            type="date"
+            id="releaseDate"
+            {...register('releaseDate', { required: 'Release date is required' })}
+            className="auth-form-input"
+          />
+          {errors.releaseDate && <p className="text-red-500">{errors.releaseDate.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="description" className="auth-form-label">Description</label>
+          <textarea
+            id="description"
+            {...register('description', { 
+              required: 'Description is required',
+              maxLength: { value: 1500, message: 'Description cannot exceed 1500 characters' }
+            })}
+            placeholder="Game Description"
+            className="auth-form-input"
+          />
+          {errors.description && <p className="text-red-500">{errors.description.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="developer" className="auth-form-label">Developer</label>
+          <input
+            type="text"
+            id="developer"
+            {...register('developer', { required: 'Developer is required' })}
+            placeholder="Developer Name"
+            className="auth-form-input"
+          />
+          {errors.developer && <p className="text-red-500">{errors.developer.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="price" className="auth-form-label">Price (€)</label>
+          <input
+            type="number"
+            id="price"
+            {...register('price', { 
+              required: 'Price is required',
+              min: { value: 0.01, message: 'Price must be a positive number' }
+            })}
+            placeholder="Game Price"
+            step="0.01"
+            className="auth-form-input"
+          />
+          {errors.price && <p className="text-red-500">{errors.price.message}</p>}
+        </div>
+        <button type="submit" className="auth-form-button">
+          Save Game
+        </button>
+        {showModal && <Modal isOpen={showModal} title="Game Update Status">
+          {modalMessage}
+        </Modal>}
+      </form>
     </div>
   );
 };

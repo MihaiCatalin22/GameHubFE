@@ -49,33 +49,33 @@ const App = () => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/forum" element={<PrivateRoute element={<ForumPage />} />} />
-              <Route path="/forum/:postId" element={<PrivateRoute element={<ForumPostDetails />} />} />
-              <Route path="/games" element={<PrivateRoute element={<GamesPage />} />} />
-              <Route path="/gamelist" element={<PrivateRoute element={<GamesList />} />} />
-              <Route path="/games/:gameId" element={<PrivateRoute element={<GameDetailsPage />} />} />
-              <Route path="/user/:userId/purchases" element={<PrivateRoute element={<PurchasesPage />} />} />
-              <Route path="/user/:userId/library" element={<PrivateRoute element={<LibraryPage />} />} />
-              <Route path="/games/:gameId/review" element={<PrivateRoute element={<ReviewSubmissionPage />} />} />
-              <Route path="/games/edit/:gameId" element={<PrivateRoute element={<EditGamePage />} />} />
-              <Route path="/users" element={<PrivateRoute element={<UserList />} />} />
-              <Route path="/users/:userId" element={<PrivateRoute element={<UserDetailPage />} />} />
-              <Route path="/user/:userId/posts" element={<PrivateRoute element={<UserPosts />} />} />
-              <Route path="/user/:userId/reviews" element={<PrivateRoute element={<UserReviews />} />} />
-              <Route path="/profile" element={<PrivateRoute element={<UserProfile />} />} />
-              <Route path="/edit-profile" element={<PrivateRoute element={<EditProfile />} />} />
-              <Route path="/add-game" element={<PrivateRoute element={<GameForm />} />} />
-              <Route path="/events" element={<PrivateRoute element={<EventList />} />} />
-              <Route path="/events/:eventId" element={<PrivateRoute element={<EventDetails />} />} />
-              <Route path="/past-events" element={<PrivateRoute element={<PastEvents />} />} />
-              <Route path="/events/edit/:eventId" element={<PrivateRoute element={<UpdateEventPage />} />} />
+              <Route path="/forum" element={<PrivateRoute><ForumPage /></PrivateRoute>} />
+              <Route path="/forum/:postId" element={<ForumPostDetails />} />
+              <Route path="/games" element={<PrivateRoute><GamesPage /></PrivateRoute>} />
+              <Route path="/gamelist" element={<PrivateRoute><GamesList /></PrivateRoute>} />
+              <Route path="/games/:gameId" element={<PrivateRoute><GameDetailsPage /></PrivateRoute>} />
+              <Route path="/user/:userId/purchases" element={<PrivateRoute><PurchasesPage /></PrivateRoute>} />
+              <Route path="/user/:userId/library" element={<PrivateRoute><LibraryPage /></PrivateRoute>} />
+              <Route path="/games/:gameId/review" element={<PrivateRoute><ReviewSubmissionPage /></PrivateRoute>} />
+              <Route path="/games/edit/:gameId" element={<PrivateRoute><EditGamePage /></PrivateRoute>} />
+              <Route path="/users" element={<PrivateRoute><UserList /></PrivateRoute>} />
+              <Route path="/users/:userId" element={<PrivateRoute><UserDetailPage /></PrivateRoute>} />
+              <Route path="/user/:userId/posts" element={<PrivateRoute><UserPosts /></PrivateRoute>} />
+              <Route path="/user/:userId/reviews" element={<PrivateRoute><UserReviews /></PrivateRoute>} />
+              <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+              <Route path="/edit-profile" element={<PrivateRoute><EditProfile /></PrivateRoute>} />
+              <Route path="/add-game" element={<PrivateRoute><GameForm /></PrivateRoute>} />
+              <Route path="/events" element={<PrivateRoute><EventList /></PrivateRoute>} />
+              <Route path="/events/:eventId" element={<PrivateRoute><EventDetails /></PrivateRoute>} />
+              <Route path="/past-events" element={<PrivateRoute><PastEvents /></PrivateRoute>} />
+              <Route path="/events/edit/:eventId" element={<PrivateRoute><UpdateEventPage /></PrivateRoute>} />
               <Route path="/logout" element={<LogoutPage />} />
-              <Route path="/recommendations/:userId" element={<PrivateRoute element={<Recommendations />} />} />
+              <Route path="/recommendations/:userId" element={<PrivateRoute><Recommendations /></PrivateRoute>} />
               <Route path="/" element={<AboutPage />} />
-              <Route path="/friends" element={<PrivateRoute element={<FriendsListPage />} />} />
-              <Route path="/pending-requests" element={<PrivateRoute element={<PendingRequestsPage />} />} />
-              <Route path="/chat/:friendId" element={<PrivateRoute element={<ChatComponent />} />} />
-              <Route path="/admin/sales-stats" element={<PrivateRoute element={<SalesStatisticsPage />} />} />
+              <Route path="/friends" element={<PrivateRoute><FriendsListPage /></PrivateRoute>} />
+              <Route path="/pending-requests" element={<PrivateRoute><PendingRequestsPage /></PrivateRoute>} />
+              <Route path="/chat/:friendId" element={<PrivateRoute><ChatComponent /></PrivateRoute>} />
+              <Route path="/admin/sales-stats" element={<PrivateRoute><SalesStatisticsPage /></PrivateRoute>} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </main>

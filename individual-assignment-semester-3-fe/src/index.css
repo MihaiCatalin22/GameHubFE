@@ -238,6 +238,36 @@ button:focus-visible {
   font-size: 1rem;
   color: #bbbbbb;
 }
+.game-details-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838;
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+}
+
+.game-details-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #50a3b3;
+}
+
+.game-details-page p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #cfcfcf;
+}
+
+.game-details-page .average-rating {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  color: #ffcc00; 
+}
 .game-details {
   background-color: #121212;
   color: #ffffff;
@@ -426,30 +456,29 @@ button:focus-visible {
 .game-form-container {
   max-width: 800px;
   margin: 2rem auto;
-  padding: 46px;
-  background-color: #1e1e1e;
+  padding: 2rem;
+  background-color: #1b2838;
+  color: #e8e8e8;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
 }
 .game-form {
-  background-color: #121212;
-  color: #ffffff;
-  padding: 2rem;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1rem;
 }
 
 .game-form label {
-  display: block;
   font-size: 1.1rem;
-  margin-bottom: 0.5rem;
   color: #bbbbbb;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
 .game-form input,
-.game-form textarea {
+.game-form textarea,
+.game-form select {
   width: 100%;
   padding: 10px 15px;
   margin-bottom: 1rem;
@@ -457,9 +486,13 @@ button:focus-visible {
   border: 1px solid #333333;
   color: #ffffff;
   border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
 }
-.game-form-input:focus,
-.game-form-textarea:focus {
+
+.game-form input:focus,
+.game-form textarea:focus,
+.game-form select:focus {
   outline: none;
   border-color: #50a3b3;
   background-color: #3a3a3a;
@@ -647,20 +680,35 @@ button:focus-visible {
   margin-bottom: 1rem;
   border: 1px solid #222;
   border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+.review-card:hover {
+  background-color: #50a3b3;
+  transform: scale(1.02);
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.review-username {
+  color: #50a3b3;
+  font-weight: bold;
 }
 
 .review-rating {
-  color: #ffcc00;
-  margin-bottom: .5rem;
+  display: flex;
 }
 
 .review-text {
   border-top: 1px solid #222;
-  padding-top: .5rem;
+  padding-top: 0.5rem;
 }
 .star {
   color: #bbb;
   font-size: 1.5rem;
+  margin-right: 0.1rem;
 }
 
 .star.rating-1 {
@@ -683,19 +731,10 @@ button:focus-visible {
   color: #45ff45;
 }
 .star.filled {
-  color: #ffcc00;
-}
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  color: #ffc107;
 }
 
-.review-username {
-  color: #cfcfcf;
-  font-weight: bold; 
-  margin-right: 1rem;
-}
+
 /* Specific button styles for auth forms */
 .auth-form-button {
   padding: 0.6rem 1rem;
@@ -852,11 +891,14 @@ button:focus-visible {
 }
 
 .forum-post-details {
-  background-color: #1e1e1e;
-  color: #ffffff;
-  border-radius: 6px;
-  padding: 1rem;
-  margin-top: 2rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838;
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
 }
 
 .post-header {
@@ -866,7 +908,7 @@ button:focus-visible {
 }
 
 .post-title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: #50a3b3;
 }
 
@@ -877,6 +919,7 @@ button:focus-visible {
   display: inline-block;
   margin-left: 1rem;
   font-size: 0.9rem;
+  color: #e8e8e8;
 }
 .post-author {
   display: block;
@@ -888,8 +931,8 @@ button:focus-visible {
 .post-type.general { background-color: #678c58; }
 .post-type.questions { background-color: #8c5c57; }
 .post-type.announcements { background-color: #57648c; }
-.post-type.guide { background-color: #c4a748}
-.post-type.bugs_and_glitches { background-color: #b55f5f;}
+.post-type.guide { background-color: #c4a748 }
+.post-type.bugs_and_glitches { background-color: #b55f5f; }
 .post-interactions {
   display: flex;
   justify-content: space-between;
@@ -914,6 +957,7 @@ button:focus-visible {
 
 .post-content {
   margin-bottom: 1rem;
+  color: #cfcfcf;
 }
 
 .comments-section {
@@ -1017,45 +1061,44 @@ button:focus-visible {
   margin: 20px auto;
 }
 .event-form-container {
-  background-color: #121212; 
-  color: #ffffff; 
-  padding: 2rem;
-  border-radius: 8px;
   max-width: 800px;
   margin: 2rem auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  background-color: #141e2e;
+  color: #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
 }
 
 .event-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1rem;
 }
 
 .event-form-label {
-  display: block;
   font-size: 1.1rem;
-  color: #bbbbbb; 
   margin-bottom: 0.5rem;
+  color: #bbbbbb;
 }
 
 .event-form-input,
-.event-form-select,
 .event-form-textarea {
   width: 100%;
   padding: 10px 15px;
   margin-bottom: 1rem;
-  background-color: #2e2e2e; 
-  border: 1px solid #333333; 
-  color: #ffffff; 
+  background-color: #2e2e2e;
+  border: 1px solid #333333;
+  color: #ffffff;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .event-form-input:focus,
-.event-form-select:focus,
 .event-form-textarea:focus {
   outline: none;
-  border-color: #50a3b3; 
+  border-color: #50a3b3;
   background-color: #3a3a3a;
 }
 
@@ -1093,16 +1136,17 @@ button:focus-visible {
   background-color: #393939;
 }
 .profile-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: #282828;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1b2838; 
+  color: #e8e8e8;
   border-radius: 8px;
-  margin: auto;
-  max-width: 600px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+  text-align: center; 
 }
+
 .profile-sidebar {
   flex-basis: 250px;
   padding: 20px;
@@ -1113,16 +1157,14 @@ button:focus-visible {
 }
 .profile-header {
   font-size: 2rem;
-  color: #ffffff;
-  margin-bottom: 10px;
-  text-align: center;
+  color: #e8e8e8;
+  margin-bottom: 1rem;
 }
 
 .profile-detail {
   color: #cccccc;
   font-size: 1.1rem;
   margin-bottom: 5px;
-  text-align: center;
 }
 .edit-profile-container {
   max-width: 800px;
@@ -1418,7 +1460,19 @@ button:focus-visible {
 .review-link:hover {
   color: #ffffff;
 }
+.review-list {
+  margin-top: 2rem;
+}
 
+.review-list h3 {
+  font-size: 1.5rem;
+  color: #50a3b3;
+}
+
+.review-list p {
+  font-size: 1.1rem;
+  color: #cfcfcf;
+}
 .user-posts-page {
   max-width: 800px;
   margin: 2rem auto;
@@ -1458,6 +1512,7 @@ button:focus-visible {
   justify-content: center;
   gap: 0.5rem;
 }
+
 
 .star {
   background: none;

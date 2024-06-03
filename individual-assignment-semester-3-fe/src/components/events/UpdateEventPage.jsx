@@ -17,7 +17,6 @@ const UpdateEventPage = () => {
     }, [eventId]);
 
     const handleEventUpdated = (updatedEvent) => {
-        console.log('Event updated:', updatedEvent);
         alert('Event updated successfully!');
         navigate('/events');
     };

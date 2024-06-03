@@ -12,7 +12,6 @@ const API_URL = 'http://localhost:8080/users';
       if (user) {
           const { jwt } = JSON.parse(user);
           config.headers['Authorization'] = `Bearer ${jwt}`;
-          console.log("Axios request config:", config);
       }
       return config;
   },

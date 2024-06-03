@@ -34,13 +34,10 @@ export const signUp = async (data) => {
 export const login = async (userData) => {
     try {
         const response = await axios.post(`${API_URL}/login`, userData);
-        console.log('Login Response:', response);
         const jwt = response.headers['authorization'];
-        console.log('JWT:', jwt);
         if (jwt) {
             const token = jwt.split(" ")[1];
             const claims = TokenManager.setAccessToken(token);
-            console.log('Decoded JWT Claims:', claims);
             return response.data;
         } else {
             throw new Error('JWT not received');

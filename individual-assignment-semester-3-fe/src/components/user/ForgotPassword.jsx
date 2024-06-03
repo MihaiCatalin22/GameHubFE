@@ -5,7 +5,7 @@ import Modal from "../Modal";
 import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
-    const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
+    const { register, handleSubmit, formState: { errors }, watch, setError, clearErrors } = useForm();
     const [step, setStep] = useState(1);
     const [username, setUsername] = useState('');
     const [message, setMessage] = useState('');
@@ -15,7 +15,9 @@ const ForgotPasswordPage = () => {
     const [isUsernameValid, setIsUsernameValid] = useState(false);
     const [usernameVerified, setUsernameVerified] = useState(false);
     const [isUsernameLoading, setIsUsernameLoading] = useState(false);
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
     const navigate = useNavigate();
+
 
     useEffect(() => {}, [isUsernameValid, isCaptchaVerified]);
 
@@ -62,14 +64,22 @@ const ForgotPasswordPage = () => {
     };
 
     const handleResetPassword = async (data) => {
-        clearErrors();
-        setMessage('');
-        try {
-            await userService.resetPassword(username, data.newPassword);
-            setMessage('Your password has been reset successfully.');
-            setIsModalOpen(true);
-        } catch (error) {
-            setError("newPassword", { type: "manual", message: "Password reset failed." });
+        const newPassword = data.newPassword;
+        const isPasswordValid = validatePassword(newPassword);
+        
+        if (isPasswordValid) {
+            clearErrors();
+            setMessage('');
+            try {
+                await userService.resetPassword(username, newPassword);
+                setMessage('Your password has been reset successfully.');
+                setIsModalOpen(true);
+            } catch (error) {
+                console.error("Password reset error:", error);
+                setError("newPassword", { type: "manual", message: "Password reset failed." });
+            }
+        } else {
+            setPasswordErrorMessage('All conditions for the password must be met.');
         }
     };
 
@@ -77,6 +87,26 @@ const ForgotPasswordPage = () => {
         setIsModalOpen(false);
         navigate("/login");
     };
+
+    const newPassword = watch("newPassword", "");
+
+    const validatePassword = (password) => {
+        const minLength = password.length >= 8;
+        const hasNumber = /[0-9]/.test(password);
+        const hasLowercase = /[a-z]/.test(password);
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasSpecialChar = /[!@#\$%\^&\*]/.test(password);
+
+        return minLength && hasNumber && hasLowercase && hasUppercase && hasSpecialChar;
+    };
+
+    const passwordConditions = [
+        { text: "At least 8 characters", valid: newPassword.length >= 8 },
+        { text: "At least one digit", valid: /[0-9]/.test(newPassword) },
+        { text: "At least one lowercase letter", valid: /[a-z]/.test(newPassword) },
+        { text: "At least one uppercase letter", valid: /[A-Z]/.test(newPassword) },
+        { text: "At least one special character", valid: /[!@#\$%\^&\*]/.test(newPassword) }
+    ];
 
     return (
         <div className="auth-form-container">
@@ -106,8 +136,7 @@ const ForgotPasswordPage = () => {
                             </div>
                         ) : (
                             <button 
-                                type="button" 
-                                onClick={() => handleSubmit(handleVerifyUsername)()} 
+                                type="submit" 
                                 className="auth-form-button"
                                 disabled={isUsernameValid}
                             >
@@ -125,7 +154,7 @@ const ForgotPasswordPage = () => {
                         ) : (
                             <button 
                                 type="button" 
-                                onClick={() => handleCaptchaVerification()} 
+                                onClick={handleCaptchaVerification} 
                                 className="auth-form-button"
                                 disabled={isCaptchaVerified || !isUsernameValid}
                             >
@@ -161,7 +190,17 @@ const ForgotPasswordPage = () => {
                         />
                         {errors.newPassword && <p className="text-red-500">{errors.newPassword.message}</p>}
                     </div>
+                    <div className="password-conditions">
+                        <ul>
+                            {passwordConditions.map((condition, index) => (
+                                <li key={index} style={{ color: condition.valid ? 'green' : 'white' }}>
+                                    {condition.text}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                     <button type="submit" className="auth-form-button">Reset Password</button>
+                    {passwordErrorMessage && <p className="text-red-500">{passwordErrorMessage}</p>}
                 </form>
             )}
 
@@ -179,3 +218,4 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
+

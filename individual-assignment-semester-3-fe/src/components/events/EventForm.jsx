@@ -80,7 +80,7 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
             type="datetime-local"
             {...register('startDate', {
               required: 'Start date is required',
-              validate: validateFutureDate
+              validate: isUpdate ? undefined : validateFutureDate
             })}
             className="event-form-input"
           />
@@ -108,4 +108,3 @@ const EventForm = ({ onEventSaved, existingEvent }) => {
 };
 
 export default EventForm;
-

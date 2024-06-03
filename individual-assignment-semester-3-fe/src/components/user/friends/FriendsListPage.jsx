@@ -21,7 +21,6 @@ const FriendsListPage = () => {
         if (userId) {
             userService.getFriends(userId)
                 .then(response => {
-                    console.log('Friends response:', response.data);
                     setFriends(response.data);
                     setLoading(false);
                 })
@@ -64,10 +63,8 @@ const FriendsListPage = () => {
 
     const handleRemoveFriend = () => {
         if (selectedFriend) {
-            console.log(`Attempting to remove friend relationship with id ${selectedFriend.id}`);
             userService.removeFriend(selectedFriend.id)
                 .then(() => {
-                    console.log(`Successfully removed friend relationship with id ${selectedFriend.id}`);
                     setFriends(friends.filter(friend => friend.id !== selectedFriend.id));
                     handleCloseConfirmModal();
                     handleCloseModal();

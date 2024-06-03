@@ -14,7 +14,7 @@ const ReviewsList = ({ reviews }) => {
               <span className="review-username">{review.user?.username || 'Anonymous'}</span>
               <div className="review-rating">
                 {[...Array(5)].map((_, index) => (
-                  <span key={index} className={`star ${index < review.rating ? `rating-${review.rating}` : ''}`}>★</span>
+                  <span key={index} className={`star ${index < review.rating ? 'filled' : ''}`}>★</span>
                 ))}
               </div>
             </div>

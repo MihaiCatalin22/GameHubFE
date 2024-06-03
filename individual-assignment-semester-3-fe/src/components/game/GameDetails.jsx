@@ -73,7 +73,12 @@ const GameDetailsPage = () => {
   };
 
   const handleReviewButton = () => {
-    navigate(`/games/${gameId}/review`);
+    if (ownsGame) {
+      navigate(`/games/${gameId}/review`);
+    } else {
+      setModalMessage('Please purchase the game first in order to leave a review.');
+      setShowModal(true);
+    }
   };
 
   const handlePurchaseGame = async () => {
@@ -162,6 +167,5 @@ const GameDetailsPage = () => {
     </div>
   );
 };
-  
-  export default GameDetailsPage;
-  
+
+export default GameDetailsPage;

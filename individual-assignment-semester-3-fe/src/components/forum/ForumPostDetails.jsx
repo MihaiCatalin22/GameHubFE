@@ -48,7 +48,7 @@ const ForumPostDetails = () => {
     if (user && user.id) {
       forumService.likePost(postId, user.id)
         .then(() => {
-          window.location.reload(); // Refresh the page after liking
+          window.location.reload(); 
         })
         .catch(error => console.error("Error toggling like on the post:", error));
     }
@@ -134,8 +134,9 @@ const ForumPostDetails = () => {
         <p>{post?.content}</p>
       </section>
       <section className="comments-section">
-        <CommentsList comments={comments} onDelete={handleDeleteComment} canDelete={canDelete}/>
         <CommentForm postId={postId} onCommentSubmit={handleCommentSubmit} />
+        <CommentsList comments={comments} onDelete={handleDeleteComment} canDelete={canDelete}/>
+        
       </section>
       <Modal 
         isOpen={isDeleteModalOpen} 

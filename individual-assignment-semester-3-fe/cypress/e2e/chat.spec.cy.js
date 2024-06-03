@@ -1,7 +1,6 @@
 describe('User Flow: Friend Requests and Messaging', () => {
     
     it('should handle friend requests and messaging', () => {
-      // Login as testuser1
       cy.visit('http://localhost:5173/login');
       cy.get('input[name="username"]').type('testuser1');
       cy.get('input[name="password"]').type('Password1!');

@@ -26,7 +26,6 @@ const EditProfile = () => {
 
     useEffect(() => {
         if (user) {
-            console.log('User ID:', user.id);
             reset({
                 username: user.username,
                 email: user.email || '',
@@ -74,7 +73,6 @@ const EditProfile = () => {
                 roles: user.roles,
                 id: user.id
             };
-            console.log('Updating user ID:', user.id);
             if (!user.id) {
                 console.error('User ID is undefined');
                 return;
@@ -102,11 +100,11 @@ const EditProfile = () => {
     }, [modalConfirmed, navigate]);
 
     return (
-        <div className="edit-profile-container">
-            <h2 className="edit-profile-title">Edit Your Profile</h2>
-            <form onSubmit={handleSubmit(onSubmit)} className='edit-profile-form'>
+        <div className="auth-form-container">
+            <h2 className="auth-form-title">Edit Your Profile</h2>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                    <label htmlFor="username" className="edit-profile-label">Username:</label>
+                    <label htmlFor="username" className="auth-form-label">Username</label>
                     <input
                         type="text"
                         id="username"
@@ -115,12 +113,12 @@ const EditProfile = () => {
                             minLength: { value: 3, message: 'Username must be at least 3 characters' },
                             maxLength: { value: 20, message: 'Username cannot exceed 20 characters' }
                         })}
-                        className="edit-profile-input"
+                        className="auth-form-input"
                     />
                     {errors.username && <p className="text-red-500">{errors.username.message}</p>}
                 </div>
                 <div>
-                    <label htmlFor="email" className="edit-profile-label">Email:</label>
+                    <label htmlFor="email" className="auth-form-label">Email</label>
                     <input
                         type="email"
                         id="email"
@@ -128,23 +126,23 @@ const EditProfile = () => {
                             required: 'Email is required',
                             pattern: { value: /^\S+@\S+$/i, message: 'Entered value does not match email format' }
                         })}
-                        className="edit-profile-input"
+                        className="auth-form-input"
                     />
                     {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                 </div>
                 <div>
-                    <label htmlFor="description" className="edit-profile-label">Bio:</label>
+                    <label htmlFor="description" className="auth-form-label">Bio</label>
                     <textarea
                         id="description"
                         {...register('description', { maxLength: { value: 255, message: 'Description must be less than 255 characters' } })}
-                        className="edit-profile-textarea"
+                        className="auth-form-input"
                         rows="4"
                     />
                     {errors.description && <p className="text-red-500">{errors.description.message}</p>}
                 </div>
                 <div>
-                    <label htmlFor="privacy" className="edit-profile-label">Privacy Settings:</label>
-                    <select id="privacy" {...register('privacy')} className="edit-profile-select">
+                    <label htmlFor="privacy" className="auth-form-label">Privacy Settings</label>
+                    <select id="privacy" {...register('privacy')} className="auth-form-input">
                         <option value="Public">Public</option>
                         <option value="FriendsOnly">Friends Only</option>
                         <option value="Private">Private</option>
@@ -158,7 +156,7 @@ const EditProfile = () => {
                         }}
                     />
                 </div>
-                <button type="submit" className='edit-profile-button'>Update Profile</button>
+                <button type="submit" className="auth-form-button">Update Profile</button>
                 {showModal && <Modal isOpen={showModal} title="Notification">
                     {modalMessage}
                 </Modal>}

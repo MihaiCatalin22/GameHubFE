@@ -13,7 +13,6 @@ const UsersPage = () => {
     userService.getAllUsers()
       .then(response => {
         setUsers(response.data); 
-        console.log("Users fetched successfully:", response.data);
       })
       .catch(error => {
         console.error("Fetching users failed:", error);
@@ -21,12 +20,8 @@ const UsersPage = () => {
   }, []);
 
   const handleUserSelect = (user) => {
-    console.log("User selected:", user);
     setSelectedUser(user); 
   };
-
-  console.log("Current users state:", users);
-  console.log("Current selectedUser state:", selectedUser);
 
   return (
     <div>

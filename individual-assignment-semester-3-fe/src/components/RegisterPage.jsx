@@ -13,7 +13,6 @@ const RegisterPage = () => {
     clearErrors();
     try {
       await userService.createUser(data);
-      console.log('User registered:', data);
       setShowModal(true);
       setTimeout(() => {
         setShowModal(false);
