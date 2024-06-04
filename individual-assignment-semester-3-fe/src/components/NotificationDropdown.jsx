@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useAuth } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
-import notificationService from "../components/services/NotificationService";
+import notificationService from "../api/NotificationService";
 
 const NotificationDropdown = () => {
     const { user } = useAuth();

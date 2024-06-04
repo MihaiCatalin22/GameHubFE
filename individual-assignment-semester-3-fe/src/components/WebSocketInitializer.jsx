@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import { useAuth } from "../contexts/authContext";
-import WebSocketService from "./services/WebSocketService";
+import WebSocketService from "../api/WebSocketService";
 
 const WebSocketInitializer = () => {
     const { user, setNotifications } = useAuth();
