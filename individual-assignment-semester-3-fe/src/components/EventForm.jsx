@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import eventService from '../api/EventService';
+import EventService from '../api/EventService';
 import Modal from './Modal';
 import { useForm } from 'react-hook-form';
 
