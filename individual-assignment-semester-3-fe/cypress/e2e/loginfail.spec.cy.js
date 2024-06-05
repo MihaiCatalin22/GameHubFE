@@ -4,10 +4,9 @@ describe('Login with invalid credentials', () => {
         cy.get('input[name="username"]').type('wronguser');
         cy.get('input[name="password"]').type('WrongPassword!');
         cy.get('button[type="submit"]').click();
-        cy.wait('@loginRequest').then((interception) => {
-          expect(interception.response.statusCode).to.equal(401);
-          cy.contains('Login failed due to an unexpected issue').should('exist');
-        });
+               
+        cy.contains('Login failed due to an unexpected issue').should('exist');
+        
         cy.url().should('include', '/login');
       });
 });

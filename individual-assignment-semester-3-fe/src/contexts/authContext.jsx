@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import userService from '../api/UserService';
 
 const AuthContext = createContext(undefined);
@@ -30,17 +30,25 @@ const TokenManager = {
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const storedToken = TokenManager.getAccessToken();
     const storedUserData = sessionStorage.getItem('user');
     if (storedUserData && storedToken) {
-      const userData = JSON.parse(storedUserData);
-      setIsAuthenticated(true);
-      setUser(userData);
-      updateAxiosToken(storedToken);
+      try {
+        const userData = JSON.parse(storedUserData);
+        setIsAuthenticated(true);
+        setUser(userData);
+        updateAxiosToken(storedToken);
+      } catch (error) {
+        console.error('Error parsing stored user data:', error);
+        TokenManager.clear();
+        sessionStorage.removeItem('user');
+      }
     }
+    setLoading(false);
   }, []);
 
   const loginUser = async (userData) => {
@@ -99,7 +107,8 @@ export const AuthProvider = ({ children }) => {
         hasRole,
         getAuthToken,
         notifications,
-        setNotifications
+        setNotifications,
+        loading,
       }}
     >
       {children}
