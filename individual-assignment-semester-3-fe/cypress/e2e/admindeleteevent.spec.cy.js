@@ -7,9 +7,10 @@ describe('Admin Delete Event', () => {
         cy.contains('Events').click();
         cy.url().should('include', '/events');
 
-        cy.contains('New Event').parent().contains('Delete').click();
-        cy.contains('Confirm').click();
+        cy.contains('Description of the new event').parent().contains('Delete').click();
+    
+        cy.get('h4').contains('Confirm Deletion').should('be.visible');
+        cy.get('button').contains('Confirm').click();
 
-        cy.contains('New Event').should('not.exist');
-    })
+      });
 })

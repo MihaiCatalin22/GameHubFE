@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import adminService from '../api/AdminService';
 import { useAuth } from "../contexts/authContext";
+import SalesStatisticsChart from '../components/SalesStatisticsChart';
 
 const SalesStatisticsPage = () => {
     const { user } = useAuth();
@@ -10,6 +11,7 @@ const SalesStatisticsPage = () => {
     const [error, setError] = useState(null);
     const [gameTitle, setGameTitle] = useState('');
     const [days, setDays] = useState(0);
+    const [showChart, setShowChart] = useState(false);  // State to toggle chart display
 
     useEffect(() => {
         if (user && user.role.includes('ADMINISTRATOR')) {
@@ -73,6 +75,10 @@ const SalesStatisticsPage = () => {
                 </select>
                 <button onClick={handleFilterChange} className="filter-button">Filter</button>
             </div>
+            <button onClick={() => setShowChart(!showChart)} className="filter-button">
+                {showChart ? 'Hide Chart' : 'Show Chart'}
+            </button>
+            {showChart && <SalesStatisticsChart stats={filteredStats} />}
             {filteredStats.length === 0 ? (
                 <p>No game found with that title.</p>
             ) : (
@@ -82,6 +88,7 @@ const SalesStatisticsPage = () => {
                             <th>Game Title</th>
                             <th>Total Units Sold</th>
                             <th>Total Revenue</th>
+                            <th>Average Rating</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,7 +96,8 @@ const SalesStatisticsPage = () => {
                             <tr key={stat.gameTitle}>
                                 <td>{stat.gameTitle}</td>
                                 <td>{stat.totalUnitsSold}</td>
-                                <td>€{stat.totalRevenue.toFixed(2)}</td>
+                                <td>€{stat.totalRevenue ? stat.totalRevenue.toFixed(2) : '0.00'}</td>
+                                <td>{stat.averageRating ? stat.averageRating.toFixed(1) : 'N/A'}</td>
                             </tr>
                         ))}
                     </tbody>
