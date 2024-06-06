@@ -25,7 +25,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error('Error during login:', error);
-      const errMsg = error.response && error.response.data ? error.response.data.message : "Login failed due to an unexpected issue.";
+      const errMsg = error.response && error.response.data ? error.response.data.message : "Wrong username or password. Try again.";
       setError("username", { type: "manual", message: errMsg });
     }
   };
