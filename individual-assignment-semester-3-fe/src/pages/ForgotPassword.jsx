@@ -2,81 +2,63 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import userService from "../api/UserService";
 import Modal from "../components/Modal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
     const { register, handleSubmit, formState: { errors }, watch, setError, clearErrors } = useForm();
     const [step, setStep] = useState(1);
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isUsernameValid, setIsUsernameValid] = useState(false);
-    const [usernameVerified, setUsernameVerified] = useState(false);
-    const [isUsernameLoading, setIsUsernameLoading] = useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+    const [isResetLinkSent, setIsResetLinkSent] = useState(false);
+    const [isTokenExpired, setIsTokenExpired] = useState(false); // New state for token expiry
     const navigate = useNavigate();
+    const location = useLocation();
+    const urlParams = new URLSearchParams(location.search);
+    const token = urlParams.get('token');
 
+    useEffect(() => {
+        if (token) {
+            setStep(2);
+        }
+    }, [token]);
 
-    useEffect(() => {}, [isUsernameValid, isCaptchaVerified]);
-
-    const handleCaptchaVerification = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            if (isUsernameValid) {
-                setIsCaptchaVerified(true);
-                clearErrors("captcha");
-            } else {
-                setError("captcha", { type: "manual", message: "Captcha verification failed" });
-            }
-            setIsLoading(false);
-        }, 3000);
-    };
-
-    const handleVerifyUsername = async (data) => {
+    const handleRequestPasswordReset = async (data) => {
         clearErrors();
         setMessage('');
-        setIsUsernameLoading(true);
+        setIsLoading(true);
 
-        setTimeout(async () => {
-            try {
-                const response = await userService.verifyUsername(data.username);
-                if (response) {
-                    setUsername(data.username);
-                    setIsUsernameValid(true);
-                    setMessage('');
-                } else {
-                    setUsername('');
-                    setIsUsernameValid(false);
-                    setError("username", { type: "manual", message: "Username not found" });
-                    setMessage('User doesn\'t exist');
-                }
-                setUsernameVerified(true);
-            } catch (error) {
-                setError("username", { type: "manual", message: "Verification failed." });
-                setIsUsernameValid(false);
-                setUsernameVerified(true);
-            } finally {
-                setIsUsernameLoading(false);
-            }
-        }, 3000);
+        try {
+            await userService.requestPasswordReset(data.email);
+            setEmail(data.email);
+            setIsResetLinkSent(true);
+        } catch (error) {
+            setError("email", { type: "manual", message: "An user with this email doesn't exist or the request failed. Please try again." });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleResetPassword = async (data) => {
         const newPassword = data.newPassword;
         const isPasswordValid = validatePassword(newPassword);
-        
+
         if (isPasswordValid) {
             clearErrors();
             setMessage('');
             try {
-                await userService.resetPassword(username, newPassword);
+                await userService.resetPasswordWithToken(token, newPassword);
                 setMessage('Your password has been reset successfully.');
                 setIsModalOpen(true);
             } catch (error) {
-                console.error("Password reset error:", error);
-                setError("newPassword", { type: "manual", message: "Password reset failed." });
+                if (error.response && error.response.data && error.response.data.message === 'Token has expired') {
+                    setIsTokenExpired(true);
+                    setMessage('Your reset token has expired. Please request a new password reset.');
+                } else {
+                    setError("newPassword", { type: "manual", message: "Password reset failed. The reset token might have expired. Try sending a new reset request." });
+                }
             }
         } else {
             setPasswordErrorMessage('All conditions for the password must be met.');
@@ -110,75 +92,52 @@ const ForgotPasswordPage = () => {
 
     return (
         <div className="auth-form-container">
-            <h2 className="auth-form-title">Forgot Password</h2>
-            {step === 1 && (
-                <form onSubmit={handleSubmit(handleVerifyUsername)} className="space-y-4">
+            <h2 className="auth-form-title">{token ? "Reset Password" : "Forgot Password"}</h2>
+            {!token && !isResetLinkSent && step === 1 && (
+                <form onSubmit={handleSubmit(handleRequestPasswordReset)} className="space-y-4">
                     <div>
-                        <label htmlFor="username" className="auth-form-label">Username</label>
+                        <label htmlFor="email" className="auth-form-label">Email</label>
                         <input 
-                            type="text" 
-                            id="username" 
-                            {...register('username', { required: 'Username is required' })} 
+                            type="email" 
+                            id="email" 
+                            {...register('email', { required: 'Email is required' })} 
                             className="auth-form-input"
                             onChange={(e) => {
-                                setUsername(e.target.value);
-                                setIsUsernameValid(false);
-                                setUsernameVerified(false);
+                                setEmail(e.target.value);
                             }}
                         />
-                        {errors.username && <p className="text-red-500">{errors.username.message}</p>}
+                        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                     </div>
-                    <div className="username-container">
-                        {isUsernameLoading ? (
-                            <div className="loading-container">
-                                <div className="loading-spinner"></div>
-                                <span>Verifying username...</span>
-                            </div>
-                        ) : (
-                            <button 
-                                type="submit" 
-                                className="auth-form-button"
-                                disabled={isUsernameValid}
-                            >
-                                {isUsernameValid ? "Username Verified" : "Verify Username"}
-                            </button>
-                        )}
-                        {usernameVerified && !isUsernameValid && <p className="text-red-500">{message}</p>}
-                    </div>
-                    <div className="captcha-container">
+                    <div className="loading-container">
                         {isLoading ? (
                             <div className="loading-container">
                                 <div className="loading-spinner"></div>
-                                <span>Verifying your captcha...</span>
+                                <span>Sending request...</span>
                             </div>
                         ) : (
-                            <button 
-                                type="button" 
-                                onClick={handleCaptchaVerification} 
-                                className="auth-form-button"
-                                disabled={isCaptchaVerified || !isUsernameValid}
-                            >
-                                {isCaptchaVerified ? "Captcha Verified" : "Verify Captcha"}
-                            </button>
+                            <button type="submit" className="auth-form-button">Request Password Reset</button>
                         )}
-                        {errors.captcha && <p className="text-red-500">{errors.captcha.message}</p>}
                     </div>
-                    <button 
-                        type="button" 
-                        className="auth-form-button" 
-                        onClick={() => {
-                            if (isCaptchaVerified && isUsernameValid) {
-                                setStep(2);
-                            }
-                        }} 
-                        disabled={!isCaptchaVerified || !isUsernameValid}
-                    >
-                        Next
-                    </button>
+                    {message && <p className="text-green-500">{message}</p>}
                 </form>
             )}
 
-            {step === 2 && (
+            {!token && isResetLinkSent && (
+                <div className="reset-link-sent-container">
+                    <p className="text-green-500">Check your email for a password reset link. If you don't see it, check your spam folder as well.</p>
+                </div>
+            )}
+
+            {isTokenExpired && (
+                <div className="token-expired-container">
+                    <p className="text-red-500">{message}</p>
+                    <button className="auth-form-button" onClick={() => navigate("/forgot-password")}>
+                        Request New Password Reset
+                    </button>
+                </div>
+            )}
+
+            {token && step === 2 && !isTokenExpired && (
                 <form onSubmit={handleSubmit(handleResetPassword)} className="space-y-4">
                     <div>
                         <label htmlFor="newPassword" className="auth-form-label">New Password</label>
@@ -218,4 +177,3 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
-

@@ -92,13 +92,28 @@ const API_URL = 'http://localhost:8080/users';
         console.error('Error verifying username:', error);
         throw error;
     }
-};
+  };
 
   
-  const resetPassword = async (username, newPassword) => {
-    const response = await api.post('/reset-password', { username, newPassword });
+const requestPasswordReset = async (email) => {
+  try {
+    const response = await api.post('/request-password-reset', { email });
     return response.data;
-  };
+  } catch (error) {
+    console.error('Error requesting password reset:', error);
+    throw error;
+  }
+};
+
+const resetPasswordWithToken = async (token, newPassword) => {
+  try {
+    const response = await api.post('/reset-password-with-token', { token, newPassword });
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    throw error;
+  }
+};
   const userService = {
     createUser,
     getUserById,
@@ -112,7 +127,8 @@ const API_URL = 'http://localhost:8080/users';
     getFriends,
     removeFriend,
     verifyUsername,
-    resetPassword
+    requestPasswordReset,
+    resetPasswordWithToken
   };
 
 export default userService;

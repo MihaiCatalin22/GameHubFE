@@ -1,4 +1,3 @@
-import SockJS from 'sockjs-client/dist/sockjs.min.js';
 import { Client } from '@stomp/stompjs';
 
 class WebSocketService {
@@ -6,7 +5,7 @@ class WebSocketService {
 
     connect(userId, onMessageReceived, onNotificationReceived) {
         this.client = new Client({
-            webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+            brokerURL: 'ws://localhost:8080/ws',
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
